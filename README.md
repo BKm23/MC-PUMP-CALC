@@ -12,11 +12,13 @@ Once you push this repo to GitHub and enable Pages, the calculator will be live 
 
 ## Features
 
+- **US / SI unit toggle** in the header. US units by default (°F, ft, inches, GPM, HP, lb/ft³, ADST/d); one click switches to SI (°C, m, mm, m³/h, kW, kg/m³, ADt/d). Every input, unit label and result updates in place.
+- **Bleached Pulp** included in the stock-type list with F1 = 0.9.
 - Live calculation as you type — total dynamic head, per-section pipe friction (Bodenheimer), pump hydraulic and shaft power, motor sizing (auto-select next IEC standard frame), VFD rating and full-load current, and affinity-law speed-turndown analysis.
-- Dual units — inputs in metric, key results also shown in imperial.
 - Add / remove pipe sections dynamically. Each section carries its own diameter, length, fittings, in-line equipment and flow fraction; the 0.5 ft/s anti-pulsation velocity rule can be applied or excluded per section (turn it off for a suction / tower-bottom line).
 - Automatic warnings for sections that fall below 0.5 ft/s (pulsation risk) or run above the 1.65 ft/s plug-flow band.
-- Download the current duty as an `.xlsx` workbook (Inputs / Results / Piping / Turndown sheets).
+- **Download Excel (`.xlsx`)** — full workbook (Inputs / Results / Piping / Turndown), dual units, via SheetJS.
+- **Download PDF** — one-click formatted engineering report via jsPDF + autoTable, in whichever unit system is currently selected.
 - Download the current inputs as a `params.json` file for archiving or replay.
 
 ## Running locally
@@ -73,7 +75,7 @@ mc-pump-sizing/
 └── .nojekyll    — tells GitHub Pages not to run Jekyll
 ```
 
-External dependency: [SheetJS](https://sheetjs.com/) loaded from a CDN, used only for the `.xlsx` export.
+External dependencies (loaded from CDN): [SheetJS](https://sheetjs.com/) for the `.xlsx` export, [jsPDF](https://github.com/parallax/jsPDF) + [jspdf-autotable](https://github.com/simonbengtsson/jsPDF-AutoTable) for the PDF export. The calculation itself is fully offline.
 
 ## Licence
 

@@ -18,24 +18,25 @@
 html,body{margin:0;padding:0;background:var(--bg);color:#111;font-family:var(--sans);font-size:14px;line-height:1.4}
 a{color:var(--mid)}
 header{background:var(--dark);color:#fff;padding:18px 24px}
+header .h-inner{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;max-width:1400px;margin:0 auto}
 header h1{margin:0;font-size:20px;font-weight:600;letter-spacing:.2px}
 header p{margin:4px 0 0 0;font-size:13px;opacity:.85}
+.unit-toggle{display:inline-flex;border:1px solid rgba(255,255,255,0.35);border-radius:5px;overflow:hidden;font-size:12px;flex-shrink:0}
+.unit-toggle button{background:transparent;color:rgba(255,255,255,0.85);border:none;padding:6px 14px;cursor:pointer;font-weight:500;font-family:var(--sans)}
+.unit-toggle button.active{background:#fff;color:var(--dark)}
+.unit-toggle button:not(.active):hover{background:rgba(255,255,255,0.1)}
 main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;padding:20px;max-width:1400px;margin:0 auto}
 @media(max-width:1000px){main{grid-template-columns:1fr}}
-
 .panel{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
 .panel > h2{margin:0;padding:10px 14px;background:var(--mid);color:#fff;font-size:13px;font-weight:600;letter-spacing:.3px;text-transform:uppercase}
 .panel > .body{padding:14px}
-
 .results{position:sticky;top:12px;align-self:start}
 @media(max-width:1000px){.results{position:static}}
-
-.row{display:grid;grid-template-columns:1fr 110px 60px;gap:8px;align-items:center;margin-bottom:6px}
-.row.wide{grid-template-columns:1fr 180px 60px}
+.row{display:grid;grid-template-columns:1fr 130px 70px;gap:8px;align-items:center;margin-bottom:6px}
+.row.wide{grid-template-columns:1fr 200px 70px}
 .row label{color:#222}
 .row .u{color:var(--muted);font-size:12px}
 .row .hint{grid-column:1/-1;color:var(--muted);font-size:12px;margin:-2px 0 4px 0}
-
 input[type=number],input[type=text],select{
   width:100%;padding:5px 8px;border:1px solid var(--input-brd);border-radius:4px;
   background:var(--input);color:#0033A0;font-family:var(--mono);font-size:13px;text-align:right;
@@ -43,37 +44,29 @@ input[type=number],input[type=text],select{
 input[type=text]{text-align:left;color:#0033A0}
 select{background:var(--input);color:#0033A0;font-family:var(--sans);text-align:left}
 input:focus,select:focus{outline:2px solid var(--mid);outline-offset:1px}
-
 .grp-title{font-weight:600;margin:14px 0 6px 0;color:var(--dark);border-bottom:1px solid var(--border);padding-bottom:2px}
 .grp-title:first-child{margin-top:0}
-
 .section-card{border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:10px;background:var(--pale)}
 .section-card h4{margin:0 0 8px 0;font-size:13px;color:var(--dark);display:flex;align-items:center;justify-content:space-between}
 .section-card h4 .del{background:#fff;border:1px solid var(--border);color:var(--bad);padding:2px 8px;border-radius:4px;cursor:pointer;font-size:12px}
 .section-card h4 .del:hover{background:#fff1f1}
 .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.mini-grid .row{margin-bottom:4px}
-.fit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:4px}
-.fit-grid .qty{display:grid;grid-template-columns:1fr 50px;gap:4px;align-items:center}
-.fit-grid .qty label{font-size:11px;color:#333}
-.fit-grid .qty input{padding:3px 6px;font-size:12px}
-
-.eq-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:4px}
-.eq-grid .qty{display:grid;grid-template-columns:1fr 50px;gap:4px;align-items:center}
-.eq-grid .qty label{font-size:11px}
-.eq-grid .qty input{padding:3px 6px;font-size:12px}
-
+.mini-grid .row{margin-bottom:4px;grid-template-columns:1fr 80px 40px}
+.fit-grid,.eq-grid{display:grid;gap:6px;margin-top:4px}
+.fit-grid{grid-template-columns:repeat(3,1fr)}
+.eq-grid{grid-template-columns:repeat(2,1fr)}
+.fit-grid .qty,.eq-grid .qty{display:grid;grid-template-columns:1fr 50px;gap:4px;align-items:center}
+.fit-grid .qty label,.eq-grid .qty label{font-size:11px;color:#333}
+.fit-grid .qty input,.eq-grid .qty input{padding:3px 6px;font-size:12px}
 button.action{background:var(--dark);color:#fff;border:none;padding:8px 14px;border-radius:4px;cursor:pointer;font-size:13px;font-weight:500}
 button.action.secondary{background:#fff;color:var(--dark);border:1px solid var(--dark)}
 button.action:hover{filter:brightness(1.1)}
 .actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-
 .headline{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
 .headline .box{background:var(--result);border:1px solid #9BBE7B;border-radius:6px;padding:10px}
 .headline .box .lbl{font-size:11px;text-transform:uppercase;color:#3f5a25;letter-spacing:.4px}
-.headline .box .val{font-family:var(--mono);font-size:22px;font-weight:600;color:#1a2f0e;margin-top:2px}
-.headline .box .sub{font-size:12px;color:#3f5a25;font-family:var(--mono)}
-
+.headline .box .val{font-family:var(--mono);font-size:20px;font-weight:600;color:#1a2f0e;margin-top:2px}
+.headline .box .sub{font-size:12px;color:#3f5a25;font-family:var(--mono);margin-top:1px}
 table.data{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
 table.data th,table.data td{border:1px solid var(--border);padding:4px 6px;text-align:right;font-family:var(--mono)}
 table.data th{background:var(--band);color:#222;font-weight:600;text-align:center}
@@ -82,39 +75,41 @@ table.data td.status-ok{color:var(--ok);font-weight:600}
 table.data td.status-low{color:var(--bad);font-weight:600}
 table.data td.status-high{color:var(--warn);font-weight:600}
 table.data td.status-nc{color:var(--muted);font-style:italic}
-
 .subhead{background:var(--band);padding:6px 10px;font-weight:600;color:var(--dark);margin:14px -14px 8px -14px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);font-size:12px;text-transform:uppercase;letter-spacing:.3px}
 .subhead:first-child{margin-top:0}
-
 .kv{display:grid;grid-template-columns:1fr auto auto;gap:6px 12px;font-family:var(--mono);font-size:13px}
 .kv .k{color:#222;font-family:var(--sans)}
 .kv .v{text-align:right;font-weight:600}
-.kv .u{color:var(--muted);text-align:left;font-size:12px}
-
+.kv .u{color:var(--muted);text-align:left;font-size:12px;min-width:80px}
 .warnings{margin-bottom:10px}
 .warn-item{border-radius:4px;padding:8px 10px;font-size:12px;margin-bottom:4px}
 .warn-item.low{background:#FEE;border-left:3px solid var(--bad);color:#7B1512}
 .warn-item.high{background:#FFF4E5;border-left:3px solid var(--warn);color:#6E4300}
 .warn-item.info{background:#EAF0FA;border-left:3px solid var(--mid);color:#1a3f6b}
-
 footer{padding:22px;max-width:1400px;margin:0 auto;color:#333}
 footer h3{margin:0 0 6px 0;color:var(--dark);font-size:14px}
 footer .refs{background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13px;line-height:1.55}
 footer .refs p{margin:6px 0}
 footer small{color:var(--muted)}
 code{background:#eef;padding:1px 4px;border-radius:3px;font-family:var(--mono);font-size:12px}
-
 .legend{font-size:11px;color:var(--muted);margin-top:6px}
 .legend span{display:inline-block;width:10px;height:10px;vertical-align:middle;margin-right:4px;border:1px solid var(--input-brd)}
-.legend .in{background:var(--input)}
-.legend .re{background:var(--result)}
+.legend .in{background:var(--input)} .legend .re{background:var(--result)}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>MC Pump Sizing Calculator</h1>
-  <p>Medium-consistency stock pump, discharge piping, motor and VFD sizing &mdash; Bodenheimer / AHLSTROM method. All calculations run in your browser; no data leaves this page.</p>
+  <div class="h-inner">
+    <div>
+      <h1>MC Pump Sizing Calculator</h1>
+      <p>Medium-consistency stock pump, discharge piping, motor and VFD sizing &mdash; Bodenheimer / AHLSTROM method. All calculations run in your browser; no data leaves this page.</p>
+    </div>
+    <div class="unit-toggle" role="tablist" aria-label="Unit system">
+      <button type="button" id="mode-us" class="active" role="tab">US units</button>
+      <button type="button" id="mode-si" role="tab">SI units</button>
+    </div>
+  </div>
 </header>
 
 <main>
@@ -125,18 +120,19 @@ code{background:#eef;padding:1px 4px;border-radius:3px;font-family:var(--mono);f
   <div class="body">
 
     <div class="grp-title">Project</div>
-    <div class="row wide"><label>Project / Mill</label><input type="text" id="project" value="Example duty"><span class="u"></span></div>
-    <div class="row wide"><label>Equipment Tag</label><input type="text" id="tag" value="TAG-001"><span class="u"></span></div>
-    <div class="row wide"><label>Service / Duty</label><input type="text" id="service" value="MC Pump"><span class="u"></span></div>
+    <div class="row wide"><label>Project / Mill</label><input type="text" data-input="project" value="Example duty"><span class="u"></span></div>
+    <div class="row wide"><label>Equipment Tag</label><input type="text" data-input="tag" value="TAG-001"><span class="u"></span></div>
+    <div class="row wide"><label>Service / Duty</label><input type="text" data-input="service" value="MC Pump"><span class="u"></span></div>
 
     <div class="grp-title">Stock &amp; Process</div>
     <div class="row wide">
       <label>Stock Type</label>
-      <select id="stock_type">
+      <select data-input="stock_type">
         <option>Softwood Sulphate (Kraft)</option>
         <option>Softwood - Fir</option>
         <option>Softwood - Cedar</option>
         <option>Hardwood Sulphate (Kraft)</option>
+        <option>Bleached Pulp</option>
         <option>Sulphite</option>
         <option>Waste / Recycled Paper</option>
         <option>Chemi-Mechanical (CTMP)</option>
@@ -145,22 +141,22 @@ code{background:#eef;padding:1px 4px;border-radius:3px;font-family:var(--mono);f
       </select>
       <span class="u"></span>
     </div>
-    <div class="row"><label>Production Rate</label><input type="number" id="production_adtd" value="632" step="1"><span class="u">ADt/d</span></div>
-    <div class="row"><label>Stock Consistency</label><input type="number" id="consistency_pct" value="8" step="0.1"><span class="u">% BD</span></div>
-    <div class="row"><label>Stock pH</label><input type="number" id="ph" value="10" step="0.1"><span class="u">pH</span></div>
-    <div class="row"><label>Stock Temperature (design)</label><input type="number" id="temperature_c" value="75" step="1"><span class="u">°C</span>
+    <div class="row"><label>Production Rate</label><input type="number" data-input="production" data-unit="production" value="632" step="0.1"><span class="u" data-unit="production"></span></div>
+    <div class="row"><label>Stock Consistency</label><input type="number" data-input="consistency_pct" data-unit="percent" value="8" step="0.1"><span class="u" data-unit="percent"></span></div>
+    <div class="row"><label>Stock pH</label><input type="number" data-input="ph" data-unit="ph" value="10" step="0.1"><span class="u" data-unit="ph"></span></div>
+    <div class="row"><label>Stock Temperature (design)</label><input type="number" data-input="temperature" data-unit="temperature" value="75" step="0.5"><span class="u" data-unit="temperature"></span>
       <span class="hint">Use a realistic LOW operating temperature &mdash; friction rises steeply with cooler stock.</span>
     </div>
 
     <div class="grp-title">Static Head</div>
-    <div class="row"><label>Suction Liquid-Level Elevation</label><input type="number" id="suction_level_m" value="919" step="0.1"><span class="u">m</span></div>
-    <div class="row"><label>Discharge Point Elevation</label><input type="number" id="discharge_elev_m" value="950.5" step="0.1"><span class="u">m</span></div>
-    <div class="row"><label>Discharge Pressure (gauge)</label><input type="number" id="discharge_pressure_m" value="5" step="0.1"><span class="u">m</span></div>
-    <div class="row"><label>Suction Pressure (gauge)</label><input type="number" id="suction_pressure_m" value="0" step="0.1"><span class="u">m</span></div>
+    <div class="row"><label>Suction Liquid-Level Elevation</label><input type="number" data-input="suction_level" data-unit="length" value="919" step="0.1"><span class="u" data-unit="length"></span></div>
+    <div class="row"><label>Discharge Point Elevation</label><input type="number" data-input="discharge_elev" data-unit="length" value="950.5" step="0.1"><span class="u" data-unit="length"></span></div>
+    <div class="row"><label>Discharge Pressure (gauge)</label><input type="number" data-input="discharge_pressure" data-unit="length" value="5" step="0.1"><span class="u" data-unit="length"></span></div>
+    <div class="row"><label>Suction Pressure (gauge)</label><input type="number" data-input="suction_pressure" data-unit="length" value="0" step="0.1"><span class="u" data-unit="length"></span></div>
 
-    <div class="grp-title">Consistency Correction (>12% BD)</div>
-    <div class="row"><label>Head Correction Factor  Ch</label><input type="number" id="ch" value="1.0" step="0.01"><span class="u"></span></div>
-    <div class="row"><label>Power Correction Factor  Cp</label><input type="number" id="cp" value="1.0" step="0.01"><span class="u"></span></div>
+    <div class="grp-title">Consistency Correction (&gt;12% BD)</div>
+    <div class="row"><label>Head Correction Factor  Ch</label><input type="number" data-input="ch" data-unit="factor" value="1.0" step="0.01"><span class="u" data-unit="factor"></span></div>
+    <div class="row"><label>Power Correction Factor  Cp</label><input type="number" data-input="cp" data-unit="factor" value="1.0" step="0.01"><span class="u" data-unit="factor"></span></div>
 
     <div class="grp-title" style="display:flex;justify-content:space-between;align-items:center">
       <span>Pipe Sections</span>
@@ -169,31 +165,32 @@ code{background:#eef;padding:1px 4px;border-radius:3px;font-family:var(--mono);f
     <div id="sections"></div>
 
     <div class="grp-title">Motor &amp; Drive</div>
-    <div class="row"><label>Stock Density</label><input type="number" id="stock_density" value="980" step="1"><span class="u">kg/m³</span></div>
-    <div class="row"><label>Pump Hydraulic Efficiency</label><input type="number" id="pump_efficiency_pct" value="50" step="0.5"><span class="u">%</span>
-      <span class="hint">MC pumps typically run 45–55%. Replace with vendor curve when known.</span>
+    <div class="row"><label>Stock Density</label><input type="number" data-input="density" data-unit="density" value="980" step="1"><span class="u" data-unit="density"></span></div>
+    <div class="row"><label>Pump Hydraulic Efficiency</label><input type="number" data-input="pump_eff" data-unit="percent" value="50" step="0.5"><span class="u" data-unit="percent"></span>
+      <span class="hint">MC pumps typically run 45&ndash;55%. Replace with vendor curve when known.</span>
     </div>
-    <div class="row"><label>Pump Shaft Power from Vendor Curve</label><input type="number" id="vendor_bhp_kw" value="" step="0.1"><span class="u">kW</span>
+    <div class="row"><label>Pump Shaft Power from Vendor Curve</label><input type="number" data-input="vendor_bhp" data-unit="power" value="" step="0.1"><span class="u" data-unit="power"></span>
       <span class="hint">Optional &mdash; if set (&gt;0) it overrides the efficiency-based estimate.</span>
     </div>
     <div class="row wide"><label>Drive Type</label>
-      <select id="drive_type"><option>Direct</option><option>V-belt</option><option>Gear</option></select>
+      <select data-input="drive_type"><option>Direct</option><option>V-belt</option><option>Gear</option></select>
       <span class="u"></span>
     </div>
-    <div class="row"><label>Drive Efficiency</label><input type="number" id="drive_efficiency_pct" value="100" step="0.5"><span class="u">%</span></div>
-    <div class="row"><label>Motor Sizing Factor</label><input type="number" id="motor_factor" value="1.2" step="0.05"><span class="u"></span></div>
-    <div class="row"><label>Motor Speed</label><input type="number" id="motor_speed_rpm" value="1780" step="10"><span class="u">rpm</span></div>
+    <div class="row"><label>Drive Efficiency</label><input type="number" data-input="drive_eff" data-unit="percent" value="100" step="0.5"><span class="u" data-unit="percent"></span></div>
+    <div class="row"><label>Motor Sizing Factor</label><input type="number" data-input="motor_factor" data-unit="factor" value="1.2" step="0.05"><span class="u" data-unit="factor"></span></div>
+    <div class="row"><label>Motor Speed</label><input type="number" data-input="motor_speed" data-unit="rpm" value="1780" step="10"><span class="u" data-unit="rpm"></span></div>
 
     <div class="grp-title">VFD &amp; Anti-Pulsation</div>
-    <div class="row"><label>Supply Voltage</label><input type="number" id="supply_voltage_v" value="400" step="1"><span class="u">V</span></div>
-    <div class="row"><label>Motor Power Factor</label><input type="number" id="power_factor" value="0.85" step="0.01"><span class="u"></span></div>
-    <div class="row"><label>Motor Efficiency</label><input type="number" id="motor_efficiency_pct" value="95" step="0.5"><span class="u">%</span></div>
-    <div class="row"><label>VFD Headroom Factor</label><input type="number" id="vfd_headroom" value="1.1" step="0.05"><span class="u"></span></div>
-    <div class="row"><label>Anti-Pulsation Velocity Limit</label><input type="number" id="velocity_limit_fts" value="0.5" step="0.05"><span class="u">ft/s</span></div>
+    <div class="row"><label>Supply Voltage</label><input type="number" data-input="voltage" data-unit="voltage" value="460" step="1"><span class="u" data-unit="voltage"></span></div>
+    <div class="row"><label>Motor Power Factor</label><input type="number" data-input="power_factor" data-unit="factor" value="0.85" step="0.01"><span class="u" data-unit="factor"></span></div>
+    <div class="row"><label>Motor Efficiency</label><input type="number" data-input="motor_eff" data-unit="percent" value="95" step="0.5"><span class="u" data-unit="percent"></span></div>
+    <div class="row"><label>VFD Headroom Factor</label><input type="number" data-input="vfd_headroom" data-unit="factor" value="1.1" step="0.05"><span class="u" data-unit="factor"></span></div>
+    <div class="row"><label>Anti-Pulsation Velocity Limit</label><input type="number" data-input="velocity_limit" data-unit="velocity" value="0.1524" step="0.005"><span class="u" data-unit="velocity"></span></div>
 
     <div class="actions">
-      <button type="button" class="action" id="dlXlsx">Download as Excel (.xlsx)</button>
-      <button type="button" class="action secondary" id="dlJson">Download params JSON</button>
+      <button type="button" class="action" id="dlXlsx">Download Excel</button>
+      <button type="button" class="action" id="dlPdf">Download PDF</button>
+      <button type="button" class="action secondary" id="dlJson">Download JSON</button>
       <button type="button" class="action secondary" id="reset">Reset to example</button>
     </div>
     <div class="legend"><span class="in"></span> highlighted = user input &nbsp;&nbsp; <span class="re"></span> = key result</div>
@@ -207,75 +204,145 @@ code{background:#eef;padding:1px 4px;border-radius:3px;font-family:var(--mono);f
 
     <div class="warnings" id="warnings"></div>
 
+    <div class="subhead" style="margin-top:0">System Overview</div>
+    <svg id="diagram" viewBox="0 0 720 300" style="width:100%;height:auto;background:#fff;border:1px solid var(--border);border-radius:6px" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <style>
+        .lbl{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;font-size:10px;fill:#333}
+        .lblb{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;font-size:11px;font-weight:700;fill:#1F3864}
+        .val{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:700;fill:#0033A0}
+        .out{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:700;fill:#1a2f0e}
+        .st{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;font-size:11px;font-weight:600;fill:#C0392B}
+        .stv{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:700;fill:#C0392B}
+      </style>
+
+      <line x1="0" y1="270" x2="720" y2="270" stroke="#BBB" stroke-dasharray="4,3" stroke-width="1"/>
+      <text x="8" y="285" class="lbl" fill="#888">datum</text>
+
+      <text x="90" y="26" text-anchor="middle" class="lblb">Feed / Suction Tower</text>
+      <rect x="40" y="36" width="100" height="234" fill="none" stroke="#333" stroke-width="2"/>
+      <rect x="42" y="112" width="96" height="156" fill="#B0D0F0" opacity="0.55"/>
+      <line x1="30" y1="112" x2="150" y2="112" stroke="#0055B0" stroke-width="1"/>
+      <text x="90" y="105" text-anchor="middle" class="lbl" fill="#0055B0">liquid level</text>
+      <text x="90" y="140" text-anchor="middle" class="val" id="dg_suct_val">—</text>
+      <text x="90" y="153" text-anchor="middle" class="lbl">elevation</text>
+      <text x="90" y="180" text-anchor="middle" class="lbl">Suction P (gauge)</text>
+      <text x="90" y="196" text-anchor="middle" class="val" id="dg_sp_val" style="font-size:11px">—</text>
+
+      <line x1="140" y1="250" x2="235" y2="250" stroke="#333" stroke-width="5" stroke-linecap="round"/>
+      <polygon points="170,245 185,250 170,255" fill="#0055B0"/>
+
+      <circle cx="260" cy="250" r="22" fill="#fff" stroke="#333" stroke-width="2"/>
+      <path d="M245,235 L275,265 M245,265 L275,235" stroke="#333" stroke-width="1.5"/>
+      <text x="260" y="292" text-anchor="middle" class="lblb" style="font-size:10px">MC Pump</text>
+
+      <rect x="228" y="192" width="64" height="30" fill="#E5E5E5" stroke="#333"/>
+      <text x="260" y="203" text-anchor="middle" class="lbl">MOTOR</text>
+      <text x="260" y="216" text-anchor="middle" class="out" id="dg_motor">—</text>
+      <line x1="260" y1="222" x2="260" y2="228" stroke="#333" stroke-width="1.5"/>
+
+      <rect x="228" y="152" width="64" height="30" fill="#FFF2CC" stroke="#C89A00"/>
+      <text x="260" y="163" text-anchor="middle" class="lbl">VFD</text>
+      <text x="260" y="176" text-anchor="middle" class="lbl" style="font-size:11px;font-weight:700;fill:#8B6A00" id="dg_vfd">—</text>
+      <line x1="260" y1="182" x2="260" y2="192" stroke="#333" stroke-width="1"/>
+
+      <path d="M282,250 L400,250 L400,110 L500,110" stroke="#333" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <polygon points="335,245 350,250 335,255" fill="#0055B0"/>
+      <polygon points="405,180 400,165 395,180" fill="#0055B0"/>
+      <polygon points="450,105 465,110 450,115" fill="#0055B0"/>
+      <text x="345" y="242" text-anchor="middle" class="lbl" fill="#0055B0" id="dg_flow_lbl">Flow: —</text>
+
+      <text x="590" y="45" text-anchor="middle" class="lblb">Discharge Point / Headbox</text>
+      <rect x="500" y="55" width="180" height="160" fill="none" stroke="#333" stroke-width="2"/>
+      <rect x="502" y="118" width="176" height="95" fill="#B0D0F0" opacity="0.55"/>
+      <text x="590" y="78" text-anchor="middle" class="lbl">Discharge elev.</text>
+      <text x="590" y="96" text-anchor="middle" class="val" id="dg_disch_val">—</text>
+      <text x="590" y="145" text-anchor="middle" class="lbl">Discharge P (gauge)</text>
+      <text x="590" y="163" text-anchor="middle" class="val" id="dg_dp_val">—</text>
+
+      <line x1="687" y1="110" x2="705" y2="110" stroke="#C0392B" stroke-width="1"/>
+      <line x1="687" y1="250" x2="705" y2="250" stroke="#C0392B" stroke-width="1"/>
+      <line x1="700" y1="110" x2="700" y2="250" stroke="#C0392B" stroke-width="1.5"/>
+      <polygon points="696,116 700,108 704,116" fill="#C0392B"/>
+      <polygon points="696,244 700,252 704,244" fill="#C0392B"/>
+      <text x="710" y="176" class="st">static</text>
+      <text x="710" y="192" class="stv" id="dg_static">—</text>
+
+      <rect x="200" y="16" width="220" height="34" fill="#C6E0B4" stroke="#7FA855" rx="4"/>
+      <text x="310" y="30" text-anchor="middle" class="lbl" style="font-size:10px;fill:#3f5a25;letter-spacing:0.5px">TOTAL DYNAMIC HEAD</text>
+      <text x="310" y="46" text-anchor="middle" class="out" style="font-size:15px" id="dg_tdh">—</text>
+
+      <text x="335" y="216" class="lbl" fill="#666" id="dg_speed">Min safe speed: —</text>
+    </svg>
+
     <div class="headline">
       <div class="box"><div class="lbl">Total Dynamic Head</div>
-        <div class="val"><span id="r_tdh_m">—</span> m</div>
-        <div class="sub"><span id="r_tdh_ft">—</span> ft</div></div>
+        <div class="val" id="r_tdh_main">&mdash;</div>
+        <div class="sub" id="r_tdh_alt">&mdash;</div></div>
       <div class="box"><div class="lbl">Design Flow</div>
-        <div class="val"><span id="r_flow_m3h">—</span> m³/h</div>
-        <div class="sub"><span id="r_flow_gpm">—</span> GPM</div></div>
+        <div class="val" id="r_flow_main">&mdash;</div>
+        <div class="sub" id="r_flow_alt">&mdash;</div></div>
       <div class="box"><div class="lbl">Selected Motor (IEC)</div>
-        <div class="val"><span id="r_motor_sel">—</span> kW</div>
-        <div class="sub">required <span id="r_motor_req">—</span> kW</div></div>
+        <div class="val" id="r_motor_main">&mdash;</div>
+        <div class="sub" id="r_motor_alt">&mdash;</div></div>
       <div class="box"><div class="lbl">Min VFD Rating</div>
-        <div class="val"><span id="r_vfd_kw">—</span> kW</div>
-        <div class="sub"><span id="r_vfd_a">—</span> A continuous</div></div>
+        <div class="val" id="r_vfd_main">&mdash;</div>
+        <div class="sub" id="r_vfd_alt">&mdash;</div></div>
     </div>
 
     <div class="subhead">Correction Factors &amp; Flow</div>
     <div class="kv">
-      <div class="k">F1 &mdash; stock quality</div><div class="v" id="r_F1">—</div><div class="u"></div>
-      <div class="k">F2 &mdash; pH</div><div class="v" id="r_F2">—</div><div class="u"></div>
-      <div class="k">F3 &mdash; temperature</div><div class="v" id="r_F3">—</div><div class="u"></div>
-      <div class="k"><b>F = F1·F2·F3</b></div><div class="v" id="r_F"><b>—</b></div><div class="u"></div>
+      <div class="k">F1 &mdash; stock quality</div><div class="v" id="r_F1">&mdash;</div><div class="u"></div>
+      <div class="k">F2 &mdash; pH</div><div class="v" id="r_F2">&mdash;</div><div class="u"></div>
+      <div class="k">F3 &mdash; temperature</div><div class="v" id="r_F3">&mdash;</div><div class="u"></div>
+      <div class="k"><b>F = F1&middot;F2&middot;F3</b></div><div class="v" id="r_F"><b>&mdash;</b></div><div class="u"></div>
     </div>
 
     <div class="subhead">Head Build-up</div>
     <div class="kv">
-      <div class="k">Static head</div><div class="v" id="r_static">—</div><div class="u">m</div>
-      <div class="k">Piping friction (Bodenheimer)</div><div class="v" id="r_fric">—</div><div class="u">m</div>
-      <div class="k">Additional equipment losses</div><div class="v" id="r_add">—</div><div class="u">m</div>
-      <div class="k"><b>Total Required Head  H</b></div><div class="v" id="r_H"><b>—</b></div><div class="u">m</div>
-      <div class="k">Selection Head  H&#8242; = H / Ch</div><div class="v" id="r_Hp">—</div><div class="u">m  (for 12% curves)</div>
+      <div class="k">Static head</div><div class="v" id="r_static">&mdash;</div><div class="u" data-unit="length"></div>
+      <div class="k">Piping friction (Bodenheimer)</div><div class="v" id="r_fric">&mdash;</div><div class="u" data-unit="length"></div>
+      <div class="k">Additional equipment losses</div><div class="v" id="r_add">&mdash;</div><div class="u" data-unit="length"></div>
+      <div class="k"><b>Total Required Head  H</b></div><div class="v" id="r_H"><b>&mdash;</b></div><div class="u" data-unit="length"></div>
+      <div class="k">Selection Head  H&#8242; = H / Ch</div><div class="v" id="r_Hp">&mdash;</div><div class="u"><span data-unit="length"></span>  (for 12% curves)</div>
     </div>
 
-    <div class="subhead">Piping — per Section</div>
+    <div class="subhead">Piping &mdash; per Section</div>
     <table class="data" id="tblPiping">
-      <thead><tr><th>#</th><th>D (mm)</th><th>Flow (GPM)</th><th>v (ft/s)</th><th>hf (ft/100ft)</th><th>Loss (m)</th><th>Add (m)</th><th>Status</th></tr></thead>
+      <thead><tr><th>#</th><th id="hD">D</th><th id="hQ">Flow</th><th id="hV">v</th><th>hf (per 100)</th><th id="hL">Loss</th><th id="hA">Add</th><th>Status</th></tr></thead>
       <tbody></tbody>
     </table>
 
     <div class="subhead">Motor &amp; Power</div>
     <div class="kv">
-      <div class="k">Hydraulic power</div><div class="v" id="r_hyd">—</div><div class="u">kW</div>
-      <div class="k">Pump shaft power (estimated)</div><div class="v" id="r_shaft">—</div><div class="u">kW</div>
-      <div class="k">Governing shaft power</div><div class="v" id="r_gov">—</div><div class="u">kW</div>
-      <div class="k">Corrected shaft power (× Cp)</div><div class="v" id="r_corr">—</div><div class="u">kW</div>
-      <div class="k">Power at motor shaft</div><div class="v" id="r_mshaft">—</div><div class="u">kW</div>
-      <div class="k">Required motor rating (× 1.2)</div><div class="v" id="r_reqmotor">—</div><div class="u">kW</div>
-      <div class="k"><b>Selected standard motor (IEC)</b></div><div class="v" id="r_selmotor"><b>—</b></div><div class="u">kW</div>
+      <div class="k">Hydraulic power</div><div class="v" id="r_hyd">&mdash;</div><div class="u" data-unit="power"></div>
+      <div class="k">Pump shaft power (estimated)</div><div class="v" id="r_shaft">&mdash;</div><div class="u" data-unit="power"></div>
+      <div class="k">Governing shaft power</div><div class="v" id="r_gov">&mdash;</div><div class="u" data-unit="power"></div>
+      <div class="k">Corrected shaft power (&times; Cp)</div><div class="v" id="r_corr">&mdash;</div><div class="u" data-unit="power"></div>
+      <div class="k">Power at motor shaft</div><div class="v" id="r_mshaft">&mdash;</div><div class="u" data-unit="power"></div>
+      <div class="k">Required motor rating (&times; motor factor)</div><div class="v" id="r_reqmotor">&mdash;</div><div class="u" data-unit="power"></div>
+      <div class="k"><b>Selected standard motor (IEC)</b></div><div class="v" id="r_selmotor"><b>&mdash;</b></div><div class="u" data-unit="power"></div>
     </div>
 
     <div class="subhead">VFD Sizing</div>
     <div class="kv">
-      <div class="k">Motor full-load current</div><div class="v" id="r_flc">—</div><div class="u">A</div>
-      <div class="k"><b>Min. VFD continuous output current</b></div><div class="v" id="r_vfdA"><b>—</b></div><div class="u">A</div>
-      <div class="k"><b>Min. VFD rated power</b></div><div class="v" id="r_vfdKW"><b>—</b></div><div class="u">kW  (variable-torque duty)</div>
+      <div class="k">Motor full-load current</div><div class="v" id="r_flc">&mdash;</div><div class="u">A</div>
+      <div class="k"><b>Min. VFD continuous output current</b></div><div class="v" id="r_vfdA"><b>&mdash;</b></div><div class="u">A</div>
+      <div class="k"><b>Min. VFD rated power</b></div><div class="v" id="r_vfdKW"><b>&mdash;</b></div><div class="u"><span data-unit="power"></span>  (variable-torque duty)</div>
     </div>
 
-    <div class="subhead">Speed Control — Affinity-Law Turndown</div>
-    <p style="font-size:12px;color:var(--muted);margin:2px 0 6px 0">Flow &prop; N &nbsp;|&nbsp; Head &prop; N² &nbsp;|&nbsp; Shaft Power &prop; N³</p>
+    <div class="subhead">Speed Control &mdash; Affinity-Law Turndown</div>
+    <p style="font-size:12px;color:var(--muted);margin:2px 0 6px 0">Flow &prop; N &nbsp;|&nbsp; Head &prop; N&sup2; &nbsp;|&nbsp; Shaft Power &prop; N&sup3;</p>
     <table class="data" id="tblAff">
-      <thead><tr><th>Speed %</th><th>rpm</th><th>Flow (m³/h)</th><th>Head (m)</th><th>Power (kW)</th><th>Min Vel (ft/s)</th><th>Status</th></tr></thead>
+      <thead><tr><th>Speed %</th><th>rpm</th><th id="ahF">Flow</th><th id="ahH">Head</th><th id="ahP">Power</th><th id="ahV">Min Vel</th><th>Status</th></tr></thead>
       <tbody></tbody>
     </table>
 
     <div class="subhead">Minimum Safe Speed</div>
     <div class="kv">
-      <div class="k">Governing min pipeline velocity at 100% speed</div><div class="v" id="r_minvel">—</div><div class="u">ft/s</div>
-      <div class="k"><b>Minimum safe speed</b></div><div class="v" id="r_minspeed"><b>—</b></div><div class="u"></div>
-      <div class="k">Minimum safe flow</div><div class="v" id="r_minflow">—</div><div class="u">m³/h</div>
-      <div class="k">Usable turndown</div><div class="v" id="r_turndown">—</div><div class="u"></div>
+      <div class="k">Governing min pipeline velocity at 100% speed</div><div class="v" id="r_minvel">&mdash;</div><div class="u" data-unit="velocity"></div>
+      <div class="k"><b>Minimum safe speed</b></div><div class="v" id="r_minspeed"><b>&mdash;</b></div><div class="u"></div>
+      <div class="k">Minimum safe flow</div><div class="v" id="r_minflow">&mdash;</div><div class="u" data-unit="flow"></div>
+      <div class="k">Usable turndown</div><div class="v" id="r_turndown">&mdash;</div><div class="u"></div>
     </div>
 
   </div>
@@ -288,11 +355,12 @@ code{background:#eef;padding:1px 4px;border-radius:3px;font-family:var(--mono);f
     <h3>About this tool</h3>
     <p>Sizes a medium-consistency (MC) centrifugal stock pump, its discharge piping, the drive motor and the VFD using
        the AHLSTROM / Kamyr procedure built on <strong>Bodenheimer's friction-loss formula</strong>. All calculation
-       happens in your browser &mdash; no server, no data upload.</p>
-    <p><strong>Friction gradient:</strong> <code>hf = 4.72 × F × Q<sup>0.15</sup> × C<sup>2.5</sup> / D<sup>1.3</sup></code>
-       (ft head per 100 ft of equivalent pipe; Q in US GPM, D in inches, C in % BD).<br>
-       <strong>F = F1·F2·F3</strong> where F1 = stock quality, F2 = pH factor, F3 = 1.6 − 0.006·T(°F).<br>
-       <strong>Flow:</strong> <code>Q (GPM) = 16.51 × Production (air-dry t/d) / Consistency (%)</code>.</p>
+       happens in your browser &mdash; no server, no data upload. Switch units with the toggle at the top right.</p>
+    <p><strong>Friction gradient:</strong> <code>hf = 4.72 &times; F &times; Q<sup>0.15</sup> &times; C<sup>2.5</sup> / D<sup>1.3</sup></code>
+       (ft head per 100 ft; Q in US GPM, D in inches, C in % BD).<br>
+       <strong>F = F1&middot;F2&middot;F3</strong> where F1 = stock quality, F2 = pH factor, F3 = 1.6 &minus; 0.006&middot;T(&deg;F).<br>
+       <strong>Flow:</strong> <code>Q (GPM) = 15 &times; Production (air-dry short t/d) / Consistency (%)</code>
+       (16.51 &times; Production in air-dry metric t/d).</p>
     <p><strong>Fittings vs equipment.</strong> Bends, tees and Ys are handled as <em>equivalent length</em>
        (added to pipe length, then multiplied by the friction gradient). Control valves, mixers, meters and reducers
        are <em>actual head loss</em> in feet, added directly to the required head. Mixing the two up is the single
@@ -306,21 +374,67 @@ code{background:#eef;padding:1px 4px;border-radius:3px;font-family:var(--mono);f
     <p><strong>Validity.</strong> Bodenheimer's formula is a turbulent-regime correlation; treat results below
        roughly 1 ft/s with caution. NPSH for MC pumps is governed by the integral degassing system &mdash; confirm
        with the pump vendor.</p>
-    <p><small>© 2026 — All rights reserved. Provided as-is with no warranty. Independently verify every
+    <p><small>&copy; 2026 &mdash; All rights reserved. Provided as-is with no warranty. Independently verify every
        calculation before use on a real project.</small></p>
   </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.7.0/dist/jspdf.plugin.autotable.min.js"></script>
 <script>
 // ================================================================
-//  MC PUMP SIZING — CALCULATION ENGINE (Bodenheimer / AHLSTROM)
+//  UNIT SYSTEM
+// ================================================================
+// Canonical (internal) storage is always SI:
+//   production ADt/d (metric air-dry tonne per day)
+//   temperature deg C, length m, diameter mm, density kg/m3
+//   velocity ft/s (kept in ft/s since the memo's 0.5 ft/s rule is stated in ft/s)
+//   power kW (internal), voltage V, rpm rpm
+// Display unit switches per MODE ('US' or 'SI').
+let MODE = 'US';   // default: US units
+
+const CONV = {
+  production: { si:{lbl:'ADt/d', dec:1},  us:{lbl:'ADST/d', dec:1},
+                toUS:v=>v*1.10231, toSI:v=>v/1.10231 },
+  temperature:{ si:{lbl:'°C', dec:1}, us:{lbl:'°F', dec:1},
+                toUS:c=>c*9/5+32,  toSI:f=>(f-32)*5/9 },
+  length:     { si:{lbl:'m',     dec:2},  us:{lbl:'ft',     dec:2},
+                toUS:v=>v*3.28084, toSI:v=>v/3.28084 },
+  diameter:   { si:{lbl:'mm',    dec:0},  us:{lbl:'in',     dec:2},
+                toUS:v=>v/25.4,    toSI:v=>v*25.4 },
+  density:    { si:{lbl:'kg/m³', dec:0}, us:{lbl:'lb/ft³', dec:2},
+                toUS:v=>v*0.0624280, toSI:v=>v/0.0624280 },
+  velocity:   { si:{lbl:'m/s',   dec:3},  us:{lbl:'ft/s',   dec:3},
+                toUS:v=>v*3.28084, toSI:v=>v/3.28084 }, // canonical stored in m/s
+  power:      { si:{lbl:'kW',    dec:2},  us:{lbl:'HP',     dec:2},
+                toUS:v=>v*1.34102, toSI:v=>v/1.34102 },
+  flow:       { si:{lbl:'m³/h', dec:1}, us:{lbl:'GPM',   dec:0},
+                toUS:v=>v/0.2271247, toSI:v=>v*0.2271247 },
+  percent:    { si:{lbl:'%',     dec:1},  us:{lbl:'%',       dec:1},
+                toUS:v=>v, toSI:v=>v },
+  factor:     { si:{lbl:'',      dec:2},  us:{lbl:'',        dec:2},
+                toUS:v=>v, toSI:v=>v },
+  ph:         { si:{lbl:'pH',    dec:1},  us:{lbl:'pH',      dec:1},
+                toUS:v=>v, toSI:v=>v },
+  voltage:    { si:{lbl:'V',     dec:0},  us:{lbl:'V',       dec:0},
+                toUS:v=>v, toSI:v=>v },
+  rpm:        { si:{lbl:'rpm',   dec:0},  us:{lbl:'rpm',     dec:0},
+                toUS:v=>v, toSI:v=>v }
+};
+function uLbl(unit){ return CONV[unit] ? CONV[unit][MODE==='US'?'us':'si'].lbl : ''; }
+function toSI(val, unit){ return CONV[unit] && MODE==='US' ? CONV[unit].toSI(val) : val; }
+function toDisplay(val, unit){ return CONV[unit] && MODE==='US' ? CONV[unit].toUS(val) : val; }
+function decOf(unit){ return CONV[unit] ? CONV[unit][MODE==='US'?'us':'si'].dec : 2; }
+
+// ================================================================
+//  CALCULATION ENGINE  (Bodenheimer / AHLSTROM) - all in SI/canonical
 // ================================================================
 const F1_TABLE = {
   "Softwood Sulphate (Kraft)":0.8, "Softwood - Fir":1.0, "Softwood - Cedar":0.7,
-  "Hardwood Sulphate (Kraft)":1.0, "Sulphite":0.8, "Waste / Recycled Paper":1.1,
-  "Chemi-Mechanical (CTMP)":1.1, "Mechanical - Screened (RMP/TMP)":1.1,
-  "Mechanical - Unscreened (RMP/TMP)":1.2
+  "Hardwood Sulphate (Kraft)":1.0, "Bleached Pulp":0.9, "Sulphite":0.8,
+  "Waste / Recycled Paper":1.1, "Chemi-Mechanical (CTMP)":1.1,
+  "Mechanical - Screened (RMP/TMP)":1.1, "Mechanical - Unscreened (RMP/TMP)":1.2
 };
 const FIT_FAC = {bend90:5, bend45:4, bend30:3, tee90:5, tee45:4, ybranch:4};
 const FIT_LABELS = {
@@ -348,12 +462,14 @@ function calcF2(ph){
 function calc(I){
   const F1 = F1_TABLE[I.stock_type] ?? 1.0;
   const F2 = calcF2(I.ph);
-  const tf = I.temperature_c*9/5 + 32;
+  const tf = I.temperature*9/5 + 32;
   const F3 = 1.6 - 0.006*tf;
   const F  = F1*F2*F3;
-  const qgpm = (I.consistency_pct>0) ? 16.51*I.production_adtd/I.consistency_pct : 0;
+  const qgpm = (I.consistency_pct>0) ? 16.51*I.production/I.consistency_pct : 0;
   const flow_m3h = qgpm * 0.2271247;
-  const static_m = (I.discharge_elev_m + I.discharge_pressure_m) - (I.suction_level_m + I.suction_pressure_m);
+  const static_m = (I.discharge_elev + I.discharge_pressure) - (I.suction_level + I.suction_pressure);
+  const velLimit_ms = I.velocity_limit ?? 0.1524;   // canonical m/s
+  const velLimit_ft = velLimit_ms * 3.28084;         // used against vft (ft/s)
 
   const sections = I.sections.map((sec,i) => {
     const idmm = sec.id_mm || 0;
@@ -373,11 +489,11 @@ function calc(I){
     let status;
     const apply = (sec.apply_velocity_rule ?? "Y");
     if(apply !== "Y") status = "nc";
-    else if(vft < 0.5) status = "low";
+    else if(vft < velLimit_ft) status = "low";
     else if(vft > 1.65) status = "high";
     else status = "ok";
     return {idx:i+1, empty:false, idmm, din, frac, qsec, feq, totalEqFt, vft, vm, hf,
-            sectionLossFt, sectionLossM, addFt, addM, status, apply};
+            sectionLossFt, sectionLossM, addFt, addM, status, apply, length_m: sec.length_m||0};
   });
 
   const totalFrictionM = sections.reduce((s,r) => s + (r.empty?0:r.sectionLossM), 0);
@@ -387,22 +503,22 @@ function calc(I){
   const Cp = I.cp ?? 1.0;
   const Hprime = (Ch>0) ? H/Ch : H;
 
-  const density = I.stock_density ?? 980;
+  const density = I.density ?? 980;
   const hyd = density * 9.81 * (flow_m3h/3600) * H / 1000;
-  const peff = I.pump_efficiency_pct ?? 50;
+  const peff = I.pump_eff ?? 50;
   const shaft = (peff>0) ? hyd/(peff/100) : 0;
-  const vendor = I.vendor_bhp_kw;
+  const vendor = I.vendor_bhp;
   const gov = (vendor && vendor > 0) ? vendor : shaft;
   const corrected = gov * Cp;
-  const deff = I.drive_efficiency_pct ?? 100;
+  const deff = I.drive_eff ?? 100;
   const mshaft = (deff>0) ? corrected/(deff/100) : corrected;
   const mfac = I.motor_factor ?? 1.2;
   const reqMotor = mshaft * mfac;
   const selMotor = IEC_MOTORS.find(m => m >= reqMotor) ?? 800;
 
-  const V = I.supply_voltage_v ?? 400;
+  const V = I.voltage ?? 460;
   const PF = I.power_factor ?? 0.85;
-  const meff = I.motor_efficiency_pct ?? 95;
+  const meff = I.motor_eff ?? 95;
   const FLC = (V>0 && PF>0 && meff>0) ? selMotor*1000/(1.7320508*V*PF*(meff/100)) : 0;
   const headroom = I.vfd_headroom ?? 1.1;
   const vfdCurrent = FLC * headroom;
@@ -410,7 +526,7 @@ function calc(I){
 
   const checkVels = sections.filter(s => !s.empty && s.status !== "nc").map(s => s.vft);
   const minVel = checkVels.length ? Math.min(...checkVels) : null;
-  const velLimit = I.velocity_limit_fts ?? 0.5;
+  const velLimit = velLimit_ft;   // ft/s for downstream comparison / render
   const minSafeSpeed = (minVel && minVel>0) ? velLimit/minVel : null;
   const minSafeFlow = (minSafeSpeed !== null) ? flow_m3h * Math.min(minSafeSpeed, 1) : null;
 
@@ -424,7 +540,7 @@ function calc(I){
 }
 
 // ================================================================
-//  UI  —  section rendering, form <-> model, live update
+//  UI  -  section rendering, form <-> model, live update
 // ================================================================
 const EXAMPLE_SECTIONS = [
   {flow_fraction:1.0, id_mm:1200, length_m:2, tee90:1, mag_meter:1, ball_valve:1, apply_velocity_rule:"N"},
@@ -434,6 +550,7 @@ const EXAMPLE_SECTIONS = [
   {flow_fraction:0.5, id_mm:400,  length_m:0.5, tee90:1, control_valve_fpball:1},
   {flow_fraction:0.5, id_mm:250,  length_m:15, bend90:3}
 ];
+// SECTIONS: canonical SI - id_mm and length_m
 let SECTIONS = JSON.parse(JSON.stringify(EXAMPLE_SECTIONS));
 
 function h(tag, attrs={}, children=[]){
@@ -462,9 +579,12 @@ function renderSections(){
     card.appendChild(head);
 
     const mini = h("div",{class:"mini-grid"});
-    mini.appendChild(rowNum("ID (mm)", sec.id_mm||"", v=>{sec.id_mm=+v||0;update();}));
-    mini.appendChild(rowNum("Length (m)", sec.length_m||"", v=>{sec.length_m=+v||0;update();}));
-    mini.appendChild(rowNum("Flow fraction", sec.flow_fraction??1, v=>{sec.flow_fraction=+v||0;update();},"0.01"));
+    mini.appendChild(rowNum(`ID (${uLbl('diameter')})`, sec.id_mm, 'diameter',
+      v=>{sec.id_mm = toSI(v||0,'diameter'); update();}));
+    mini.appendChild(rowNum(`Length (${uLbl('length')})`, sec.length_m, 'length',
+      v=>{sec.length_m = toSI(v||0,'length'); update();}));
+    mini.appendChild(rowNum("Flow fraction", sec.flow_fraction??1, 'factor',
+      v=>{sec.flow_fraction = +v||0; update();},"0.01"));
     mini.appendChild(rowSelect("Apply 0.5 ft/s rule?", sec.apply_velocity_rule??"Y",
        ["Y","N"], v=>{sec.apply_velocity_rule=v;update();}));
     card.appendChild(mini);
@@ -488,11 +608,12 @@ function renderSections(){
   });
 }
 
-function rowNum(label, val, onin, step="any"){
+function rowNum(label, siVal, unit, onin, step="any"){
   const r = h("div",{class:"row"});
   r.appendChild(h("label",{},label));
-  const inp = h("input",{type:"number",value:val,step:step});
-  inp.addEventListener("input", e => onin(e.target.value));
+  const disp = (siVal===""||siVal==null) ? "" : (+toDisplay(+siVal, unit).toFixed(decOf(unit)));
+  const inp = h("input",{type:"number",value:disp,step:step});
+  inp.addEventListener("input", e => onin(+e.target.value||0));
   r.appendChild(inp);
   r.appendChild(h("span",{class:"u"},""));
   return r;
@@ -521,34 +642,21 @@ function qtyField(label, val, onin){
 }
 
 function readInputs(){
-  const g = id => document.getElementById(id);
-  const num = id => { const v = parseFloat(g(id).value); return isNaN(v) ? null : v; };
-  return {
-    project: g("project").value, tag: g("tag").value, service: g("service").value,
-    stock_type: g("stock_type").value,
-    production_adtd: num("production_adtd"),
-    consistency_pct: num("consistency_pct"),
-    ph: num("ph"),
-    temperature_c: num("temperature_c"),
-    suction_level_m: num("suction_level_m"),
-    discharge_elev_m: num("discharge_elev_m"),
-    discharge_pressure_m: num("discharge_pressure_m"),
-    suction_pressure_m: num("suction_pressure_m"),
-    ch: num("ch"), cp: num("cp"),
-    sections: SECTIONS,
-    stock_density: num("stock_density"),
-    pump_efficiency_pct: num("pump_efficiency_pct"),
-    vendor_bhp_kw: num("vendor_bhp_kw"),
-    drive_type: g("drive_type").value,
-    drive_efficiency_pct: num("drive_efficiency_pct"),
-    motor_factor: num("motor_factor"),
-    motor_speed_rpm: num("motor_speed_rpm"),
-    supply_voltage_v: num("supply_voltage_v"),
-    power_factor: num("power_factor"),
-    motor_efficiency_pct: num("motor_efficiency_pct"),
-    vfd_headroom: num("vfd_headroom"),
-    velocity_limit_fts: num("velocity_limit_fts")
-  };
+  const out = { sections: SECTIONS };
+  document.querySelectorAll("[data-input]").forEach(inp => {
+    const name = inp.dataset.input;
+    const unit = inp.dataset.unit;
+    if(inp.type === "number"){
+      const raw = inp.value.trim();
+      if(raw === "") { out[name] = null; return; }
+      const v = parseFloat(raw);
+      if(isNaN(v)) { out[name] = null; return; }
+      out[name] = unit ? toSI(v, unit) : v;
+    } else {
+      out[name] = inp.value;
+    }
+  });
+  return out;
 }
 
 function fmt(n, d=2){
@@ -557,214 +665,349 @@ function fmt(n, d=2){
 }
 function fmt0(n){ return fmt(n,0); }
 function pct(n){ return (n==null || !isFinite(n)) ? "—" : (Math.round(n*100)+"%"); }
+function withUnit(vSI, unit, dec){
+  if(vSI==null || !isFinite(vSI)) return "—";
+  const v = toDisplay(vSI, unit);
+  const d = dec == null ? decOf(unit) : dec;
+  return `${fmt(v,d)} ${uLbl(unit)}`;
+}
+function altUnit(vSI, unit){
+  // opposite mode
+  const other = MODE==='US' ? 'si' : 'us';
+  const disp = MODE==='US' ? CONV[unit].toSI(CONV[unit].toUS(vSI)) : CONV[unit].toUS(CONV[unit].toSI(vSI));
+  // Simpler: compute in canonical (SI) then convert to other-mode label
+  const v = other==='us' ? CONV[unit].toUS(vSI) : vSI;
+  const d = CONV[unit][other].dec;
+  return `${fmt(v,d)} ${CONV[unit][other].lbl}`;
+}
 
 function render(R){
   const g = id => document.getElementById(id);
-  g("r_flow_m3h").textContent = fmt(R.flow_m3h,1);
-  g("r_flow_gpm").textContent = fmt0(R.qgpm);
-  g("r_tdh_m").textContent = fmt(R.H,2);
-  g("r_tdh_ft").textContent = fmt(R.H*3.28084,1);
-  g("r_motor_sel").textContent = fmt0(R.selMotor);
-  g("r_motor_req").textContent = fmt(R.reqMotor,1);
-  g("r_vfd_kw").textContent = fmt0(R.vfdPower);
-  g("r_vfd_a").textContent = fmt0(R.vfdCurrent);
+
+  // headline boxes (primary = current mode, sub = other)
+  g("r_tdh_main").textContent = withUnit(R.H, 'length');
+  g("r_tdh_alt").textContent  = altUnit(R.H, 'length');
+  // flow: SI mode m3/h primary, GPM alt; US mode GPM primary, m3/h alt
+  if(MODE==='US'){
+    g("r_flow_main").textContent = `${fmt0(R.qgpm)} GPM`;
+    g("r_flow_alt").textContent  = `${fmt(R.flow_m3h,1)} m³/h`;
+  } else {
+    g("r_flow_main").textContent = `${fmt(R.flow_m3h,1)} m³/h`;
+    g("r_flow_alt").textContent  = `${fmt0(R.qgpm)} GPM`;
+  }
+  g("r_motor_main").textContent = withUnit(R.selMotor, 'power', 0);
+  g("r_motor_alt").textContent  = `required ${withUnit(R.reqMotor,'power',1)}`;
+  g("r_vfd_main").textContent   = withUnit(R.vfdPower, 'power', 0);
+  g("r_vfd_alt").textContent    = `${fmt(R.vfdCurrent,0)} A continuous`;
+
+  // factors
   g("r_F1").textContent = fmt(R.F1,3);
   g("r_F2").textContent = fmt(R.F2,3);
   g("r_F3").textContent = fmt(R.F3,3);
-  g("r_F").textContent = fmt(R.F,4);
-  g("r_static").textContent = fmt(R.static_m,2);
-  g("r_fric").textContent = fmt(R.totalFrictionM,2);
-  g("r_add").textContent = fmt(R.totalAddM,2);
-  g("r_H").textContent = fmt(R.H,2);
-  g("r_Hp").textContent = fmt(R.Hprime,2);
-  g("r_hyd").textContent = fmt(R.hyd,2);
-  g("r_shaft").textContent = fmt(R.shaft,2);
-  g("r_gov").textContent = fmt(R.gov,2);
-  g("r_corr").textContent = fmt(R.corrected,2);
-  g("r_mshaft").textContent = fmt(R.mshaft,2);
-  g("r_reqmotor").textContent = fmt(R.reqMotor,1);
-  g("r_selmotor").textContent = fmt0(R.selMotor);
-  g("r_flc").textContent = fmt(R.FLC,1);
+  g("r_F").textContent  = fmt(R.F,4);
+
+  // head build-up (units in the .u spans below via updateUnitLabels)
+  g("r_static").textContent  = fmt(toDisplay(R.static_m,'length'), decOf('length'));
+  g("r_fric").textContent    = fmt(toDisplay(R.totalFrictionM,'length'), decOf('length'));
+  g("r_add").textContent     = fmt(toDisplay(R.totalAddM,'length'), decOf('length'));
+  g("r_H").textContent       = fmt(toDisplay(R.H,'length'), decOf('length'));
+  g("r_Hp").textContent      = fmt(toDisplay(R.Hprime,'length'), decOf('length'));
+
+  // power block
+  g("r_hyd").textContent      = fmt(toDisplay(R.hyd,'power'), decOf('power'));
+  g("r_shaft").textContent    = fmt(toDisplay(R.shaft,'power'), decOf('power'));
+  g("r_gov").textContent      = fmt(toDisplay(R.gov,'power'), decOf('power'));
+  g("r_corr").textContent     = fmt(toDisplay(R.corrected,'power'), decOf('power'));
+  g("r_mshaft").textContent   = fmt(toDisplay(R.mshaft,'power'), decOf('power'));
+  g("r_reqmotor").textContent = fmt(toDisplay(R.reqMotor,'power'), 1);
+  g("r_selmotor").textContent = fmt(toDisplay(R.selMotor,'power'), 0);
+
+  // vfd
+  g("r_flc").textContent  = fmt(R.FLC,1);
   g("r_vfdA").textContent = fmt(R.vfdCurrent,1);
-  g("r_vfdKW").textContent = fmt0(R.vfdPower);
+  g("r_vfdKW").textContent= fmt(toDisplay(R.vfdPower,'power'), 0);
+
+  // piping table headers
+  const dU = uLbl('diameter'), lU = uLbl('length'), vU = uLbl('velocity');
+  document.getElementById("hD").textContent = `D (${dU})`;
+  document.getElementById("hQ").textContent = MODE==='US' ? 'Flow (GPM)' : 'Flow (m³/h)';
+  document.getElementById("hV").textContent = `v (${vU})`;
+  document.getElementById("hL").textContent = `Loss (${lU})`;
+  document.getElementById("hA").textContent = `Add (${lU})`;
 
   const tb = document.querySelector("#tblPiping tbody");
   tb.innerHTML = "";
   R.sections.forEach(s => {
     const tr = document.createElement("tr");
     if(s.empty){
-      tr.innerHTML = `<td>${s.idx}</td><td colspan="7" style="text-align:center;color:var(--muted)">— empty —</td>`;
+      tr.innerHTML = `<td>${s.idx}</td><td colspan="7" style="text-align:center;color:var(--muted)">&mdash; empty &mdash;</td>`;
     } else {
       const statusCls = "status-"+s.status;
       const statusTxt = s.status==="ok"?"OK":s.status==="low"?"LOW — pulsation":s.status==="high"?"HIGH (>1.65)":"not checked";
-      tr.innerHTML = `<td>${s.idx}</td><td>${fmt0(s.idmm)}</td><td>${fmt0(s.qsec)}</td>`
-        + `<td>${fmt(s.vft,2)}</td><td>${fmt(s.hf,2)}</td>`
-        + `<td>${fmt(s.sectionLossM,3)}</td><td>${fmt(s.addM,2)}</td>`
+      const dispD = toDisplay(s.idmm, 'diameter');
+      const dispV = MODE==='US' ? s.vft : s.vm;
+      const dispQ = MODE==='US' ? Math.round(s.qsec) : (s.qsec * 0.2271247).toFixed(1);
+      const dispLoss = fmt(toDisplay(s.sectionLossM,'length'), 3);
+      const dispAdd = fmt(toDisplay(s.addM,'length'), 2);
+      tr.innerHTML = `<td>${s.idx}</td><td>${fmt(dispD, decOf('diameter'))}</td><td>${dispQ}</td>`
+        + `<td>${fmt(dispV,2)}</td><td>${fmt(s.hf,2)}</td>`
+        + `<td>${dispLoss}</td><td>${dispAdd}</td>`
         + `<td class="${statusCls}">${statusTxt}</td>`;
     }
     tb.appendChild(tr);
   });
 
+  // affinity table
+  document.getElementById("ahF").textContent = MODE==='US' ? 'Flow (GPM)' : 'Flow (m³/h)';
+  document.getElementById("ahH").textContent = `Head (${lU})`;
+  document.getElementById("ahP").textContent = `Power (${uLbl('power')})`;
+  document.getElementById("ahV").textContent = `Min Vel (${vU})`;
   const aff = document.querySelector("#tblAff tbody");
   aff.innerHTML = "";
   const speeds = [1.0,0.9,0.8,0.7,0.6,0.5];
-  const rpm = R.inputs.motor_speed_rpm ?? 1780;
+  const rpm = R.inputs.motor_speed ?? 1780;
   speeds.forEach(s => {
     const tr = document.createElement("tr");
-    const flow = R.flow_m3h * s;
-    const head = R.H * s * s;
-    const pwr = R.corrected * s * s * s;
-    const vel = R.minVel ? R.minVel * s : null;
-    const stat = vel == null ? "—" : (vel < R.velLimit ? "PULSATION RISK" : "OK");
-    const cls = vel == null ? "" : (vel < R.velLimit ? "status-low" : "status-ok");
+    const flowSI = R.flow_m3h * s;
+    const flowDisp = MODE==='US' ? Math.round(flowSI/0.2271247) : (flowSI).toFixed(1);
+    const headDisp = fmt(toDisplay(R.H*s*s, 'length'), 2);
+    const pwrDisp = fmt(toDisplay(R.corrected*s*s*s, 'power'), 2);
+    const velft = R.minVel ? R.minVel * s : null;
+    const velDisp = velft==null ? "—" : (MODE==='US' ? velft.toFixed(3) : (velft*0.3048).toFixed(3));
+    const stat = velft==null ? "—" : (velft < R.velLimit ? "PULSATION RISK" : "OK");
+    const cls = velft==null ? "" : (velft < R.velLimit ? "status-low" : "status-ok");
     tr.innerHTML = `<td>${Math.round(s*100)}%</td><td>${fmt0(rpm*s)}</td>`
-      + `<td>${fmt(flow,1)}</td><td>${fmt(head,2)}</td><td>${fmt(pwr,2)}</td>`
-      + `<td>${vel==null?"—":fmt(vel,2)}</td><td class="${cls}">${stat}</td>`;
+      + `<td>${flowDisp}</td><td>${headDisp}</td><td>${pwrDisp}</td>`
+      + `<td>${velDisp}</td><td class="${cls}">${stat}</td>`;
     aff.appendChild(tr);
   });
 
-  g("r_minvel").textContent = fmt(R.minVel,2);
+  // min safe speed
+  g("r_minvel").textContent   = R.minVel==null ? "—" : (MODE==='US' ? fmt(R.minVel,3) : fmt(R.minVel*0.3048,3));
   g("r_minspeed").textContent = R.minSafeSpeed==null ? "—" : pct(R.minSafeSpeed);
-  g("r_minflow").textContent = fmt(R.minSafeFlow,1);
+  g("r_minflow").textContent  = R.minSafeFlow==null ? "—" : (MODE==='US' ? Math.round(R.minSafeFlow/0.2271247) : fmt(R.minSafeFlow,1));
   g("r_turndown").textContent = R.minSafeSpeed==null ? "—"
       : (R.minSafeSpeed > 1 ? "none — already below limit at 100%" : `${pct(R.minSafeSpeed)} to 100% speed`);
 
   // warnings
-  const w = document.getElementById("warnings");
-  w.innerHTML = "";
+  const w = document.getElementById("warnings"); w.innerHTML = "";
   const flags = [];
   R.sections.forEach(s => {
     if(s.empty) return;
-    if(s.status==="low") flags.push({cls:"low", msg:`Section ${s.idx}: velocity ${fmt(s.vft,2)} ft/s is below the 0.5 ft/s pulsation limit.`});
-    if(s.status==="high") flags.push({cls:"high", msg:`Section ${s.idx}: velocity ${fmt(s.vft,2)} ft/s is above the normal 1.65 ft/s plug-flow band.`});
+    const vDisp = MODE==='US' ? `${s.vft.toFixed(2)} ft/s` : `${(s.vm).toFixed(2)} m/s`;
+    if(s.status==="low") flags.push({cls:"low", msg:`Section ${s.idx}: velocity ${vDisp} is below the 0.5 ft/s pulsation limit.`});
+    if(s.status==="high") flags.push({cls:"high", msg:`Section ${s.idx}: velocity ${vDisp} is above the normal 1.65 ft/s plug-flow band.`});
   });
   if(R.inputs.consistency_pct > 12 && R.Ch === 1 && R.Cp === 1){
     flags.push({cls:"info", msg:`Consistency above 12% — set Ch and Cp from the vendor's consistency-correction curve.`});
   }
   if(R.selMotor < R.reqMotor){
-    flags.push({cls:"low", msg:`Selected motor (${R.selMotor} kW) is below the required rating (${fmt(R.reqMotor,1)} kW).`});
+    flags.push({cls:"low", msg:`Selected motor (${fmt0(toDisplay(R.selMotor,'power'))} ${uLbl('power')}) is below the required rating (${fmt(toDisplay(R.reqMotor,'power'),1)} ${uLbl('power')}).`});
   }
   if(R.minSafeSpeed !== null && R.minSafeSpeed > 1){
     flags.push({cls:"low", msg:`Minimum safe speed exceeds 100% — pipeline is over-sized, no VFD turndown possible.`});
   }
-  flags.forEach(f => {
-    w.appendChild(h("div",{class:"warn-item "+f.cls}, f.msg));
+  flags.forEach(f => { w.appendChild(h("div",{class:"warn-item "+f.cls}, f.msg)); });
+
+  // update unit label spans in the results block
+  document.querySelectorAll(".kv .u [data-unit]").forEach(sp => {
+    sp.textContent = uLbl(sp.dataset.unit);
+  });
+  document.querySelectorAll(".kv .u").forEach(el => {
+    if(el.dataset && el.dataset.unit && el.children.length===0){
+      el.textContent = uLbl(el.dataset.unit);
+    }
+  });
+
+  updateDiagram(R);
+}
+
+// ---- System diagram: update dynamic labels ----
+function updateDiagram(R){
+  const g = id => document.getElementById(id);
+  const lU = uLbl('length');
+  const pU = uLbl('power');
+  const dispLen = v => `${fmt(toDisplay(v,'length'), decOf('length'))} ${lU}`;
+  const dispPow = v => `${fmt(toDisplay(v,'power'), 0)} ${pU}`;
+  const I = R.inputs;
+
+  g('dg_suct_val').textContent  = dispLen(I.suction_level);
+  g('dg_disch_val').textContent = dispLen(I.discharge_elev);
+  g('dg_sp_val').textContent    = dispLen(I.suction_pressure ?? 0);
+  g('dg_dp_val').textContent    = dispLen(I.discharge_pressure);
+  g('dg_static').textContent    = dispLen(R.static_m);
+  g('dg_tdh').textContent       = dispLen(R.H);
+  g('dg_motor').textContent     = dispPow(R.selMotor);
+  g('dg_vfd').textContent       = dispPow(R.vfdPower);
+  g('dg_flow_lbl').textContent  = MODE==='US'
+      ? `Flow: ${fmt0(R.qgpm)} GPM`
+      : `Flow: ${fmt(R.flow_m3h,1)} m³/h`;
+  g('dg_speed').textContent     = R.minSafeSpeed==null
+      ? 'Min safe speed: —'
+      : (R.minSafeSpeed > 1
+          ? 'Min safe speed: >100% (over-sized)'
+          : `Min safe speed: ${pct(R.minSafeSpeed)}`);
+}
+
+// ================================================================
+//  UNIT-MODE TOGGLE
+// ================================================================
+function applyModeToInputs(){
+  // Update all input field values (in place) to display in current MODE, based on the currently-typed number.
+  // Because we don't know the previous mode's exact stored SI value for each field (we just have the display
+  // value in the previous mode), we convert:  prev-mode display -> SI -> new-mode display.
+  document.querySelectorAll("[data-input][data-unit]").forEach(inp => {
+    if(inp.type !== "number") return;
+    const raw = inp.value.trim();
+    if(raw==="") return;
+    const v = parseFloat(raw);
+    if(isNaN(v)) return;
+    const unit = inp.dataset.unit;
+    if(!CONV[unit] || !CONV[unit].toUS || CONV[unit].toUS === CONV[unit].toSI) return;
+    // v is in previous mode's unit; PREV mode is the opposite of current.
+    const siVal = PREV_MODE==='US' ? CONV[unit].toSI(v) : v;
+    const dispVal = MODE==='US' ? CONV[unit].toUS(siVal) : siVal;
+    inp.value = +dispVal.toFixed(decOf(unit));
+  });
+}
+function updateAllUnitLabels(){
+  document.querySelectorAll(".u[data-unit]").forEach(sp => {
+    if(!sp.dataset.unit) return;
+    sp.textContent = uLbl(sp.dataset.unit);
+  });
+  document.querySelectorAll(".kv .u [data-unit]").forEach(sp => {
+    sp.textContent = uLbl(sp.dataset.unit);
   });
 }
 
-function update(){
-  const I = readInputs();
-  const R = calc(I);
-  render(R);
+let PREV_MODE = 'US';
+function setMode(newMode){
+  if(newMode === MODE) return;
+  PREV_MODE = MODE;
+  MODE = newMode;
+  applyModeToInputs();
+  updateAllUnitLabels();
+  renderSections();
+  document.getElementById("mode-us").classList.toggle("active", MODE==='US');
+  document.getElementById("mode-si").classList.toggle("active", MODE==='SI');
+  update();
 }
 
 // ================================================================
-//  EXCEL DOWNLOAD via SheetJS
+//  DOWNLOADS - Excel, PDF, JSON
 // ================================================================
+function unitPair(vSI, unit, dec=null){
+  const d = dec == null ? decOf(unit) : dec;
+  const us = CONV[unit].toUS(vSI), si = vSI;
+  return { us:+us.toFixed(CONV[unit].us.dec), usLbl:CONV[unit].us.lbl,
+           si:+si.toFixed(CONV[unit].si.dec), siLbl:CONV[unit].si.lbl };
+}
 function downloadXlsx(){
   const I = readInputs(); const R = calc(I);
   const wb = XLSX.utils.book_new();
-
   const inputRows = [
     ["MC PUMP SIZING — INPUTS"],
-    ["Project", I.project],["Tag", I.tag],["Service", I.service],[],
+    ["Project", I.project],["Tag", I.tag],["Service", I.service],
+    ["Report generated", new Date().toISOString().slice(0,19).replace('T',' ')],
+    ["Unit system", MODE],
+    [],
     ["Stock type", I.stock_type],
-    ["Production (ADt/d)", I.production_adtd],
+    ["Production (ADt/d)", I.production],
     ["Consistency (%BD)", I.consistency_pct],
     ["pH", I.ph],
-    ["Temperature (°C)", I.temperature_c],
+    ["Temperature (°C)", I.temperature],
+    ["Temperature (°F)", I.temperature*9/5+32],
     [],
-    ["Suction liquid level (m)", I.suction_level_m],
-    ["Discharge elevation (m)", I.discharge_elev_m],
-    ["Discharge pressure (m)", I.discharge_pressure_m],
-    ["Suction pressure (m)", I.suction_pressure_m],
+    ["Suction liquid level (m)", I.suction_level],
+    ["Discharge elevation (m)", I.discharge_elev],
+    ["Discharge pressure (m)", I.discharge_pressure],
+    ["Suction pressure (m)", I.suction_pressure],
     ["Ch", I.ch],["Cp", I.cp],
     [],
-    ["Stock density (kg/m³)", I.stock_density],
-    ["Pump efficiency (%)", I.pump_efficiency_pct],
-    ["Vendor BHP (kW)", I.vendor_bhp_kw],
+    ["Stock density (kg/m³)", I.density],
+    ["Pump efficiency (%)", I.pump_eff],
+    ["Vendor BHP (kW)", I.vendor_bhp],
     ["Drive type", I.drive_type],
-    ["Drive efficiency (%)", I.drive_efficiency_pct],
+    ["Drive efficiency (%)", I.drive_eff],
     ["Motor sizing factor", I.motor_factor],
-    ["Motor speed (rpm)", I.motor_speed_rpm],
+    ["Motor speed (rpm)", I.motor_speed],
     [],
-    ["Supply voltage (V)", I.supply_voltage_v],
+    ["Supply voltage (V)", I.voltage],
     ["Power factor", I.power_factor],
-    ["Motor efficiency (%)", I.motor_efficiency_pct],
+    ["Motor efficiency (%)", I.motor_eff],
     ["VFD headroom", I.vfd_headroom],
-    ["Anti-pulsation velocity limit (ft/s)", I.velocity_limit_fts],
+    ["Anti-pulsation velocity limit (ft/s)", I.velocity_limit],
   ];
   const wsIn = XLSX.utils.aoa_to_sheet(inputRows);
   wsIn['!cols'] = [{wch:36},{wch:32}];
   XLSX.utils.book_append_sheet(wb, wsIn, "Inputs");
 
   const resRows = [
-    ["MC PUMP SIZING — RESULTS"],
+    ["MC PUMP SIZING — RESULTS  (dual units)"],
     ["Correction factors"],
-    ["F1  (stock quality)", R.F1],
-    ["F2  (pH)", R.F2],
-    ["F3  (temperature)", R.F3],
-    ["F  (combined)", R.F],
+    ["F1 (stock quality)", R.F1],
+    ["F2 (pH)", R.F2],
+    ["F3 (temperature)", R.F3],
+    ["F combined", R.F],
     [],
-    ["Flow"],
-    ["Q  (US GPM)", R.qgpm],
-    ["Flow  (m³/h)", R.flow_m3h],
+    ["Flow", R.flow_m3h, "m3/h", R.qgpm, "GPM"],
     [],
-    ["Head build-up"],
-    ["Static head (m)", R.static_m],
-    ["Piping friction (m)", R.totalFrictionM],
-    ["Additional equipment losses (m)", R.totalAddM],
-    ["Total required head H (m)", R.H],
-    ["Selection head H' = H/Ch (m)", R.Hprime],
+    ["Head build-up (m / ft)"],
+    ["Static head", R.static_m, "m", R.static_m*3.28084, "ft"],
+    ["Piping friction", R.totalFrictionM, "m", R.totalFrictionM*3.28084, "ft"],
+    ["Additional equipment losses", R.totalAddM, "m", R.totalAddM*3.28084, "ft"],
+    ["Total required head H", R.H, "m", R.H*3.28084, "ft"],
+    ["Selection head H' = H/Ch", R.Hprime, "m", R.Hprime*3.28084, "ft"],
     [],
-    ["Power & motor"],
-    ["Hydraulic power (kW)", R.hyd],
-    ["Pump shaft (estimated) (kW)", R.shaft],
-    ["Governing shaft power (kW)", R.gov],
-    ["Corrected shaft power ×Cp (kW)", R.corrected],
-    ["Motor shaft power (kW)", R.mshaft],
-    ["Required motor rating ×"+I.motor_factor+" (kW)", R.reqMotor],
-    ["Selected standard motor (kW)", R.selMotor],
+    ["Power (kW / HP)"],
+    ["Hydraulic power", R.hyd, "kW", R.hyd*1.34102, "HP"],
+    ["Pump shaft (estimated)", R.shaft, "kW", R.shaft*1.34102, "HP"],
+    ["Governing shaft power", R.gov, "kW", R.gov*1.34102, "HP"],
+    ["Corrected shaft ×Cp", R.corrected, "kW", R.corrected*1.34102, "HP"],
+    ["Motor shaft power", R.mshaft, "kW", R.mshaft*1.34102, "HP"],
+    ["Required motor rating", R.reqMotor, "kW", R.reqMotor*1.34102, "HP"],
+    ["Selected standard motor", R.selMotor, "kW", R.selMotor*1.34102, "HP"],
     [],
     ["VFD"],
     ["Motor full-load current (A)", R.FLC],
-    ["Min. VFD continuous output current (A)", R.vfdCurrent],
-    ["Min. VFD rated power (kW)", R.vfdPower],
+    ["Min VFD continuous output current (A)", R.vfdCurrent],
+    ["Min VFD rated power", R.vfdPower, "kW", R.vfdPower*1.34102, "HP"],
     [],
-    ["Minimum safe speed"],
-    ["Governing min velocity at 100% (ft/s)", R.minVel],
-    ["Anti-pulsation limit (ft/s)", R.velLimit],
+    ["Anti-pulsation"],
+    ["Governing min velocity at 100%", R.minVel, "ft/s", R.minVel?R.minVel*0.3048:null, "m/s"],
+    ["Anti-pulsation limit", R.velLimit, "ft/s"],
     ["Minimum safe speed", R.minSafeSpeed],
-    ["Minimum safe flow (m³/h)", R.minSafeFlow],
+    ["Minimum safe flow", R.minSafeFlow, "m3/h", R.minSafeFlow?R.minSafeFlow/0.2271247:null, "GPM"],
   ];
   const wsRe = XLSX.utils.aoa_to_sheet(resRows);
-  wsRe['!cols'] = [{wch:44},{wch:20}];
+  wsRe['!cols'] = [{wch:34},{wch:14},{wch:8},{wch:14},{wch:8}];
   XLSX.utils.book_append_sheet(wb, wsRe, "Results");
 
-  const pipeHdr = ["#","D (mm)","Flow (GPM)","Length (m)","Fitting equiv (ft)","v (ft/s)","v (m/s)",
-                   "hf (ft/100ft)","Section loss (m)","Additional loss (m)","Apply rule","Status"];
+  const pipeHdr = ["#","D (mm)","D (in)","Flow (GPM)","Length (m)","v (ft/s)","v (m/s)",
+                   "hf (per 100)","Section loss (m)","Section loss (ft)","Additional loss (m)","Additional loss (ft)","Apply rule","Status"];
   const pipeRows = [pipeHdr];
   R.sections.forEach(s => {
-    if(s.empty) pipeRows.push([s.idx,"","","","","","","","","","",""]);
-    else pipeRows.push([s.idx, s.idmm, Math.round(s.qsec),
-      I.sections[s.idx-1].length_m ?? 0, +s.feq.toFixed(2),
-      +s.vft.toFixed(3), +s.vm.toFixed(3), +s.hf.toFixed(3),
-      +s.sectionLossM.toFixed(3), +s.addM.toFixed(2), s.apply,
+    if(s.empty) pipeRows.push([s.idx].concat(Array(pipeHdr.length-1).fill("")));
+    else pipeRows.push([s.idx, s.idmm, +s.din.toFixed(2), Math.round(s.qsec),
+      s.length_m, +s.vft.toFixed(3), +s.vm.toFixed(3), +s.hf.toFixed(3),
+      +s.sectionLossM.toFixed(3), +s.sectionLossFt.toFixed(3),
+      +s.addM.toFixed(2), +s.addFt.toFixed(2), s.apply,
       s.status==="ok"?"OK":s.status==="low"?"LOW":s.status==="high"?"HIGH":"not checked"]);
   });
   const wsPi = XLSX.utils.aoa_to_sheet(pipeRows);
   wsPi['!cols'] = pipeHdr.map(()=>({wch:14}));
   XLSX.utils.book_append_sheet(wb, wsPi, "Piping");
 
-  const affHdr = ["Speed %","rpm","Flow m³/h","Head m","Power kW","Min Vel ft/s","Status"];
+  const affHdr = ["Speed %","rpm","Flow m³/h","Flow GPM","Head m","Head ft","Power kW","Power HP","Min Vel ft/s","Min Vel m/s","Status"];
   const affRows = [affHdr];
-  const rpm = I.motor_speed_rpm ?? 1780;
+  const rpm = I.motor_speed ?? 1780;
   [1.0,0.9,0.8,0.7,0.6,0.5].forEach(s => {
     const vel = R.minVel ? R.minVel*s : null;
     affRows.push([Math.round(s*100)+"%", Math.round(rpm*s),
-      +(R.flow_m3h*s).toFixed(1), +(R.H*s*s).toFixed(2),
-      +(R.corrected*s*s*s).toFixed(2),
-      vel==null?"":+vel.toFixed(2),
+      +(R.flow_m3h*s).toFixed(1), Math.round(R.flow_m3h*s/0.2271247),
+      +(R.H*s*s).toFixed(2), +(R.H*s*s*3.28084).toFixed(2),
+      +(R.corrected*s*s*s).toFixed(2), +(R.corrected*s*s*s*1.34102).toFixed(2),
+      vel==null?"":+vel.toFixed(2), vel==null?"":+(vel*0.3048).toFixed(3),
       vel==null?"":(vel<R.velLimit?"PULSATION RISK":"OK")]);
   });
   const wsAf = XLSX.utils.aoa_to_sheet(affRows);
@@ -773,6 +1016,154 @@ function downloadXlsx(){
 
   const fname = `MC_Pump_Sizing_${(I.tag||"duty").replace(/[^\w\-]/g,"_")}.xlsx`;
   XLSX.writeFile(wb, fname);
+}
+
+function downloadPdf(){
+  const I = readInputs(); const R = calc(I);
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:'mm', format:'a4', orientation:'portrait'});
+  const W = doc.internal.pageSize.getWidth();
+  const H = doc.internal.pageSize.getHeight();
+  const dU=uLbl('diameter'), lU=uLbl('length'), vU=uLbl('velocity'), pU=uLbl('power'), fU=CONV.flow[MODE==='US'?'us':'si'].lbl;
+
+  // header
+  doc.setFillColor(31,56,100); doc.rect(0,0,W,20,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(15); doc.setFont(undefined,'bold');
+  doc.text('MC Pump Sizing Report', 12, 13);
+  doc.setFontSize(9); doc.setFont(undefined,'normal');
+  doc.text(`Unit system: ${MODE}`, W-45, 8);
+  doc.text(new Date().toISOString().slice(0,19).replace('T',' '), W-45, 13);
+
+  let y = 26;
+  doc.setTextColor(0,0,0); doc.setFontSize(11); doc.setFont(undefined,'bold');
+  doc.text(`${I.project||''}`, 12, y); y+=5;
+  doc.setFontSize(9); doc.setFont(undefined,'normal');
+  doc.text(`Tag: ${I.tag||''}   Service: ${I.service||''}`, 12, y); y+=6;
+
+  // helper
+  const secHead = (t) => {
+    doc.setFillColor(47,84,150); doc.setTextColor(255,255,255);
+    doc.setFontSize(9); doc.setFont(undefined,'bold');
+    doc.rect(10,y-4,W-20,6,'F'); doc.text(t,12,y); y+=5;
+    doc.setTextColor(0,0,0); doc.setFont(undefined,'normal');
+  };
+  const kv = (rows) => {
+    doc.autoTable({ startY:y+1, head:[], body:rows, theme:'plain',
+      styles:{fontSize:9, cellPadding:1.2}, columnStyles:{0:{cellWidth:80},1:{cellWidth:35,halign:'right'},2:{cellWidth:20}},
+      margin:{left:12,right:12} });
+    y = doc.lastAutoTable.finalY + 3;
+  };
+  const table = (head, body, colStyles) => {
+    doc.autoTable({ startY:y+1, head:[head], body:body,
+      headStyles:{fillColor:[217,226,243],textColor:0,fontStyle:'bold',fontSize:8,halign:'center'},
+      bodyStyles:{fontSize:8}, columnStyles: colStyles||{},
+      margin:{left:12,right:12}, tableWidth:'auto' });
+    y = doc.lastAutoTable.finalY + 3;
+  };
+
+  secHead('Design Conditions');
+  kv([
+    ['Stock type', I.stock_type, ''],
+    ['Production', fmt(toDisplay(I.production,'production'),1), uLbl('production')],
+    ['Consistency', fmt(I.consistency_pct,1), '%BD'],
+    ['pH', fmt(I.ph,1), ''],
+    ['Temperature (design)', fmt(toDisplay(I.temperature,'temperature'),1), uLbl('temperature')],
+    ['Stock density', fmt(toDisplay(I.density,'density'),decOf('density')), uLbl('density')]
+  ]);
+
+  secHead('Static Head');
+  kv([
+    ['Suction liquid-level elevation', fmt(toDisplay(I.suction_level,'length'),2), lU],
+    ['Discharge point elevation', fmt(toDisplay(I.discharge_elev,'length'),2), lU],
+    ['Discharge pressure (gauge)', fmt(toDisplay(I.discharge_pressure,'length'),2), lU],
+    ['Suction pressure (gauge)', fmt(toDisplay(I.suction_pressure,'length'),2), lU],
+    ['Static head', fmt(toDisplay(R.static_m,'length'),2), lU]
+  ]);
+
+  secHead('Correction Factors & Flow');
+  kv([
+    ['F1 (stock quality)', fmt(R.F1,3), ''],
+    ['F2 (pH)', fmt(R.F2,3), ''],
+    ['F3 (temperature)', fmt(R.F3,3), ''],
+    ['F combined', fmt(R.F,4), ''],
+    ['Design flow', MODE==='US'?fmt0(R.qgpm):fmt(R.flow_m3h,1), fU]
+  ]);
+
+  secHead('Head Build-up');
+  kv([
+    ['Static head', fmt(toDisplay(R.static_m,'length'),2), lU],
+    ['Piping friction (Bodenheimer)', fmt(toDisplay(R.totalFrictionM,'length'),2), lU],
+    ['Additional equipment losses', fmt(toDisplay(R.totalAddM,'length'),2), lU],
+    ['TOTAL REQUIRED HEAD H', fmt(toDisplay(R.H,'length'),2), lU],
+    ["Selection head H' = H/Ch (for 12% curves)", fmt(toDisplay(R.Hprime,'length'),2), lU]
+  ]);
+
+  if(y > H-70){ doc.addPage(); y=15; }
+  secHead('Piping — per Section');
+  const pipeBody = R.sections.map(s => {
+    if(s.empty) return [s.idx, '—','—','—','—','—','—','—'];
+    return [s.idx,
+      fmt(toDisplay(s.idmm,'diameter'),decOf('diameter')),
+      MODE==='US'?Math.round(s.qsec):fmt(s.qsec*0.2271247,1),
+      MODE==='US'?fmt(s.vft,2):fmt(s.vm,2),
+      fmt(s.hf,2),
+      fmt(toDisplay(s.sectionLossM,'length'),3),
+      fmt(toDisplay(s.addM,'length'),2),
+      s.status==='ok'?'OK':s.status==='low'?'LOW':s.status==='high'?'HIGH':'nc'];
+  });
+  table(['#',`D (${dU})`,`Flow (${fU})`,`v (${vU})`,'hf (per 100)',`Loss (${lU})`,`Add (${lU})`,'Status'], pipeBody);
+
+  if(y > H-70){ doc.addPage(); y=15; }
+  secHead('Motor & Power');
+  kv([
+    ['Hydraulic power', fmt(toDisplay(R.hyd,'power'),2), pU],
+    ['Pump shaft (estimated)', fmt(toDisplay(R.shaft,'power'),2), pU],
+    ['Governing shaft power', fmt(toDisplay(R.gov,'power'),2), pU],
+    ['Corrected shaft ×Cp', fmt(toDisplay(R.corrected,'power'),2), pU],
+    ['Motor shaft power', fmt(toDisplay(R.mshaft,'power'),2), pU],
+    ['Required motor rating', fmt(toDisplay(R.reqMotor,'power'),1), pU],
+    ['SELECTED STANDARD MOTOR (IEC)', fmt(toDisplay(R.selMotor,'power'),0), pU]
+  ]);
+
+  secHead('VFD Sizing');
+  kv([
+    ['Motor full-load current', fmt(R.FLC,1), 'A'],
+    ['Min VFD continuous output current', fmt(R.vfdCurrent,1), 'A'],
+    ['MIN VFD RATED POWER (variable-torque duty)', fmt(toDisplay(R.vfdPower,'power'),0), pU]
+  ]);
+
+  if(y > H-70){ doc.addPage(); y=15; }
+  secHead('Speed Control — Affinity-Law Turndown');
+  const rpm = I.motor_speed ?? 1780;
+  const affBody = [1.0,0.9,0.8,0.7,0.6,0.5].map(s => {
+    const vel = R.minVel ? R.minVel*s : null;
+    return [Math.round(s*100)+'%', Math.round(rpm*s),
+      MODE==='US'?Math.round(R.flow_m3h*s/0.2271247):fmt(R.flow_m3h*s,1),
+      fmt(toDisplay(R.H*s*s,'length'),2),
+      fmt(toDisplay(R.corrected*s*s*s,'power'),2),
+      vel==null?'—':(MODE==='US'?fmt(vel,3):fmt(vel*0.3048,3)),
+      vel==null?'—':(vel<R.velLimit?'PULSATION RISK':'OK')];
+  });
+  table(['Speed %','rpm',`Flow (${fU})`,`Head (${lU})`,`Power (${pU})`,`Min Vel (${vU})`,'Status'], affBody);
+
+  secHead('Minimum Safe Speed');
+  kv([
+    ['Governing min pipeline velocity at 100%', R.minVel==null?'—':(MODE==='US'?fmt(R.minVel,3):fmt(R.minVel*0.3048,3)), vU],
+    ['Anti-pulsation velocity limit', MODE==='US'?fmt(R.velLimit,3):fmt(R.velLimit*0.3048,3), vU],
+    ['Minimum safe speed', R.minSafeSpeed==null?'—':pct(R.minSafeSpeed), ''],
+    ['Minimum safe flow', R.minSafeFlow==null?'—':(MODE==='US'?Math.round(R.minSafeFlow/0.2271247):fmt(R.minSafeFlow,1)), fU],
+    ['Usable turndown', R.minSafeSpeed==null?'—':(R.minSafeSpeed>1?'none — >100%':`${pct(R.minSafeSpeed)} to 100%`), '']
+  ]);
+
+  // footer note on last page
+  doc.setFontSize(7); doc.setTextColor(120,120,120);
+  const foot = 'Method: AHLSTROM / Kamyr "MC Pumps & Pipelines" (K. Serenius, 19-Apr-1990). Bodenheimer friction-loss formula. '
+    + 'All rights reserved. Verify against vendor pump curves and mill standards before final selection.';
+  const lines = doc.splitTextToSize(foot, W-24);
+  doc.text(lines, 12, H-8);
+
+  const fname = `MC_Pump_Sizing_${(I.tag||"duty").replace(/[^\w\-]/g,"_")}.pdf`;
+  doc.save(fname);
 }
 
 function downloadJson(){
@@ -785,27 +1176,39 @@ function downloadJson(){
   setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
 }
 
+// ================================================================
+//  DEFAULTS  (canonical SI)
+// ================================================================
+const DEFAULTS_SI = {
+  project:"Sappi GoCell - FL2 Hi-Kappa (example)", tag:"46-1085", service:"MC Pump - Wash Press Feed",
+  stock_type:"Softwood Sulphate (Kraft)",
+  production:632, consistency_pct:8, ph:10, temperature:75,
+  suction_level:919, discharge_elev:950.5, discharge_pressure:5, suction_pressure:0,
+  ch:1.0, cp:1.0,
+  density:980, pump_eff:50, vendor_bhp:"",
+  drive_type:"Direct", drive_eff:100, motor_factor:1.2, motor_speed:1780,
+  voltage:460, power_factor:0.85, motor_eff:95,
+  vfd_headroom:1.1, velocity_limit:0.1524
+};
 function resetExample(){
   SECTIONS = JSON.parse(JSON.stringify(EXAMPLE_SECTIONS));
-  const defaults = {
-    project:"Sappi GoCell - FL2 Hi-Kappa (example)", tag:"46-1085", service:"MC Pump - Wash Press Feed",
-    stock_type:"Softwood Sulphate (Kraft)",
-    production_adtd:632, consistency_pct:8, ph:10, temperature_c:75,
-    suction_level_m:919, discharge_elev_m:950.5, discharge_pressure_m:5, suction_pressure_m:0,
-    ch:1.0, cp:1.0,
-    stock_density:980, pump_efficiency_pct:50, vendor_bhp_kw:"",
-    drive_type:"Direct", drive_efficiency_pct:100, motor_factor:1.2, motor_speed_rpm:1780,
-    supply_voltage_v:400, power_factor:0.85, motor_efficiency_pct:95,
-    vfd_headroom:1.1, velocity_limit_fts:0.5
-  };
-  for(const [k,v] of Object.entries(defaults)){
-    const el = document.getElementById(k); if(el) el.value = v;
+  for(const [k,v] of Object.entries(DEFAULTS_SI)){
+    const el = document.querySelector(`[data-input="${k}"]`);
+    if(!el) continue;
+    if(el.type === "number" && v !== "" && el.dataset.unit){
+      const disp = toDisplay(+v, el.dataset.unit);
+      el.value = +disp.toFixed(decOf(el.dataset.unit));
+    } else {
+      el.value = v;
+    }
   }
   renderSections(); update();
 }
 
+function update(){ render(calc(readInputs())); }
+
 // ================================================================
-//  wire up
+//  init
 // ================================================================
 document.addEventListener("input", update);
 document.addEventListener("change", update);
@@ -814,8 +1217,19 @@ document.getElementById("addSection").addEventListener("click", ()=>{
   renderSections(); update();
 });
 document.getElementById("dlXlsx").addEventListener("click", downloadXlsx);
+document.getElementById("dlPdf").addEventListener("click", downloadPdf);
 document.getElementById("dlJson").addEventListener("click", downloadJson);
 document.getElementById("reset").addEventListener("click", resetExample);
+document.getElementById("mode-us").addEventListener("click", ()=>setMode('US'));
+document.getElementById("mode-si").addEventListener("click", ()=>setMode('SI'));
+
+// On initial load: HTML values are written as SI defaults. Since MODE='US', convert them to US display.
+(function initToUS(){
+  PREV_MODE = 'SI';  // pretend previous mode was SI so the applyModeToInputs converts SI->US on init
+  applyModeToInputs();
+  PREV_MODE = 'US';
+  updateAllUnitLabels();
+})();
 
 renderSections();
 update();
