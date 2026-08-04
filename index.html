@@ -300,8 +300,8 @@ code{background:#eef;padding:1px 4px;border-radius:3px;font-family:var(--mono);f
     <div class="subhead">Head Build-up</div>
     <div class="kv">
       <div class="k">Static head</div><div class="v" id="r_static">&mdash;</div><div class="u" data-unit="length"></div>
-      <div class="k">Piping friction (Bodenheimer)</div><div class="v" id="r_fric">&mdash;</div><div class="u" data-unit="length"></div>
-      <div class="k">Additional equipment losses</div><div class="v" id="r_add">&mdash;</div><div class="u" data-unit="length"></div>
+      <div class="k">Piping friction  (pipe + fittings, Bodenheimer)</div><div class="v" id="r_fric">&mdash;</div><div class="u" data-unit="length"></div>
+      <div class="k">Equipment friction  (equiv length &times; hf)</div><div class="v" id="r_add">&mdash;</div><div class="u" data-unit="length"></div>
       <div class="k"><b>Total Required Head  H</b></div><div class="v" id="r_H"><b>&mdash;</b></div><div class="u" data-unit="length"></div>
       <div class="k">Selection Head  H&#8242; = H / Ch</div><div class="v" id="r_Hp">&mdash;</div><div class="u"><span data-unit="length"></span>  (for 12% curves)</div>
     </div>
@@ -361,10 +361,13 @@ code{background:#eef;padding:1px 4px;border-radius:3px;font-family:var(--mono);f
        <strong>F = F1&middot;F2&middot;F3</strong> where F1 = stock quality, F2 = pH factor, F3 = 1.6 &minus; 0.006&middot;T(&deg;F).<br>
        <strong>Flow:</strong> <code>Q (GPM) = 15 &times; Production (air-dry short t/d) / Consistency (%)</code>
        (16.51 &times; Production in air-dry metric t/d).</p>
-    <p><strong>Fittings vs equipment.</strong> Bends, tees and Ys are handled as <em>equivalent length</em>
-       (added to pipe length, then multiplied by the friction gradient). Control valves, mixers, meters and reducers
-       are <em>actual head loss</em> in feet, added directly to the required head. Mixing the two up is the single
-       most common error.</p>
+    <p><strong>All losses as equivalent length.</strong> Bends, tees, Ys, control valves, mixers, meters and
+       reducers are all handled as <em>equivalent length</em> in feet &mdash; added to the straight run length,
+       then multiplied by the friction gradient hf. This matches the older AHLSTROM &ldquo;Mixer Pressure
+       Calculations&rdquo; convention. Note: for fixed-pressure devices (e.g. an orifice with a stated psi
+       drop), convert the fixed pressure to feet of head, add it as a separate static term or use a section
+       with a very short pipe length; treating a fixed-pressure drop as equivalent length would make it scale
+       with hf, which is incorrect.</p>
     <p><strong>Anti-pulsation rule.</strong> Minimum MC pipeline velocity is 0.5 ft/s (0.15 m/s); below it the plug
        flow breaks into stick/slip pulsation that damages pipe supports. This sets the VFD's minimum safe speed.</p>
     <p><strong>Reference.</strong> Method from AHLSTROM / Kamyr inter-office memo <em>"MC Pumps &amp; Pipelines"</em>
@@ -442,7 +445,7 @@ const FIT_LABELS = {
   tee90:"Tee-90° branch", tee45:"Tee-45° branch", ybranch:"Y branch"
 };
 const LOSS_FT = {
-  control_valve_vball:60, control_valve_fpball:33, shear_plate:33, reducer:30,
+  control_valve_vball:50, control_valve_fpball:33, shear_plate:33, reducer:30,
   increaser:0, static_mixer:15, mc_mixer:0, mag_meter:3, knife_gate:10, ball_valve:5
 };
 const LOSS_LABELS = {
@@ -478,26 +481,32 @@ function calc(I){
     const frac = sec.flow_fraction ?? 1.0;
     const qsec = qgpm * frac;
     const feq = Object.entries(FIT_FAC).reduce((s,[k,v]) => s + (sec[k]||0)*v, 0) * din / 12;
-    const totalEqFt = (sec.length_m||0)*3.28084 + feq;
+    const pipeEqFt = (sec.length_m||0)*3.28084 + feq;                         // pipe + fittings equiv
+    const equipEqFt = Object.entries(LOSS_FT).reduce((s,[k,v]) => s + (sec[k]||0)*v, 0); // equipment equiv length ft
+    const totalEqFt = pipeEqFt + equipEqFt;                                    // ALL as equivalent length
     const vft = 0.4085 * qsec / (din*din);
     const vm  = vft * 0.3048;
     const hf  = 4.72 * F * Math.pow(qsec,0.15) * Math.pow(I.consistency_pct,2.5) / Math.pow(din,1.3);
-    const sectionLossFt = totalEqFt * hf / 100;
+    const pipeLossFt  = pipeEqFt  * hf / 100;    // head loss from pipe + fittings
+    const equipLossFt = equipEqFt * hf / 100;    // head loss from equipment (equiv length × hf)
+    const sectionLossFt = pipeLossFt + equipLossFt;    // total section head loss
     const sectionLossM  = sectionLossFt * 0.3048;
-    const addFt = Object.entries(LOSS_FT).reduce((s,[k,v]) => s + (sec[k]||0)*v, 0);
-    const addM  = addFt * 0.3048;
+    const pipeLossM  = pipeLossFt  * 0.3048;
+    const equipLossM = equipLossFt * 0.3048;
     let status;
     const apply = (sec.apply_velocity_rule ?? "Y");
     if(apply !== "Y") status = "nc";
     else if(vft < velLimit_ft) status = "low";
     else if(vft > 1.65) status = "high";
     else status = "ok";
-    return {idx:i+1, empty:false, idmm, din, frac, qsec, feq, totalEqFt, vft, vm, hf,
-            sectionLossFt, sectionLossM, addFt, addM, status, apply, length_m: sec.length_m||0};
+    return {idx:i+1, empty:false, idmm, din, frac, qsec, feq, equipEqFt, totalEqFt, vft, vm, hf,
+            sectionLossFt, sectionLossM, pipeLossM, equipLossM,
+            addFt: equipLossFt, addM: equipLossM,   // legacy names (now equipment head via equiv length)
+            status, apply, length_m: sec.length_m||0};
   });
 
-  const totalFrictionM = sections.reduce((s,r) => s + (r.empty?0:r.sectionLossM), 0);
-  const totalAddM      = sections.reduce((s,r) => s + (r.empty?0:r.addM), 0);
+  const totalFrictionM = sections.reduce((s,r) => s + (r.empty?0:r.pipeLossM), 0);   // pipe+fittings
+  const totalAddM      = sections.reduce((s,r) => s + (r.empty?0:r.equipLossM), 0);  // equipment via equiv length
   const H = static_m + totalFrictionM + totalAddM;
   const Ch = I.ch ?? 1.0;
   const Cp = I.cp ?? 1.0;
@@ -596,7 +605,7 @@ function renderSections(){
     });
     card.appendChild(fitGrid);
 
-    card.appendChild(h("div",{style:"font-size:11px;color:var(--muted);margin-top:8px"},"In-line equipment — actual head loss"));
+    card.appendChild(h("div",{style:"font-size:11px;color:var(--muted);margin-top:8px"},"In-line equipment — equivalent length (ft, added to total equiv length then × hf)"));
     const eqGrid = h("div",{class:"eq-grid"});
     Object.keys(LOSS_FT).forEach(k => {
       eqGrid.appendChild(qtyField(`${LOSS_LABELS[k]} (${LOSS_FT[k]} ft)`, sec[k]||"",
@@ -747,8 +756,8 @@ function render(R){
       const dispD = toDisplay(s.idmm, 'diameter');
       const dispV = MODE==='US' ? s.vft : s.vm;
       const dispQ = MODE==='US' ? Math.round(s.qsec) : (s.qsec * 0.2271247).toFixed(1);
-      const dispLoss = fmt(toDisplay(s.sectionLossM,'length'), 3);
-      const dispAdd = fmt(toDisplay(s.addM,'length'), 2);
+      const dispLoss = fmt(toDisplay(s.pipeLossM,'length'), 3);   // pipe + fittings
+      const dispAdd = fmt(toDisplay(s.equipLossM,'length'), 2);   // equipment (via equiv len)
       tr.innerHTML = `<td>${s.idx}</td><td>${fmt(dispD, decOf('diameter'))}</td><td>${dispQ}</td>`
         + `<td>${fmt(dispV,2)}</td><td>${fmt(s.hf,2)}</td>`
         + `<td>${dispLoss}</td><td>${dispAdd}</td>`
@@ -954,8 +963,8 @@ function downloadXlsx(){
     [],
     ["Head build-up (m / ft)"],
     ["Static head", R.static_m, "m", R.static_m*3.28084, "ft"],
-    ["Piping friction", R.totalFrictionM, "m", R.totalFrictionM*3.28084, "ft"],
-    ["Additional equipment losses", R.totalAddM, "m", R.totalAddM*3.28084, "ft"],
+    ["Piping friction (pipe + fittings, Bodenheimer)", R.totalFrictionM, "m", R.totalFrictionM*3.28084, "ft"],
+    ["Equipment friction (equiv length × hf)", R.totalAddM, "m", R.totalAddM*3.28084, "ft"],
     ["Total required head H", R.H, "m", R.H*3.28084, "ft"],
     ["Selection head H' = H/Ch", R.Hprime, "m", R.Hprime*3.28084, "ft"],
     [],
@@ -1092,8 +1101,8 @@ function downloadPdf(){
   secHead('Head Build-up');
   kv([
     ['Static head', fmt(toDisplay(R.static_m,'length'),2), lU],
-    ['Piping friction (Bodenheimer)', fmt(toDisplay(R.totalFrictionM,'length'),2), lU],
-    ['Additional equipment losses', fmt(toDisplay(R.totalAddM,'length'),2), lU],
+    ['Piping friction (pipe + fittings, Bodenheimer)', fmt(toDisplay(R.totalFrictionM,'length'),2), lU],
+    ['Equipment friction (equiv length × hf)', fmt(toDisplay(R.totalAddM,'length'),2), lU],
     ['TOTAL REQUIRED HEAD H', fmt(toDisplay(R.H,'length'),2), lU],
     ["Selection head H' = H/Ch (for 12% curves)", fmt(toDisplay(R.Hprime,'length'),2), lU]
   ]);
