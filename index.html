@@ -154,10 +154,6 @@ code{background:#eef;padding:1px 4px;border-radius:3px;font-family:var(--mono);f
     <div class="row"><label>Discharge Pressure (gauge)</label><input type="number" data-input="discharge_pressure" data-unit="length" value="5" step="0.1"><span class="u" data-unit="length"></span></div>
     <div class="row"><label>Suction Pressure (gauge)</label><input type="number" data-input="suction_pressure" data-unit="length" value="0" step="0.1"><span class="u" data-unit="length"></span></div>
 
-    <div class="grp-title">Consistency Correction (&gt;12% BD)</div>
-    <div class="row"><label>Head Correction Factor  Ch</label><input type="number" data-input="ch" data-unit="factor" value="1.0" step="0.01"><span class="u" data-unit="factor"></span></div>
-    <div class="row"><label>Power Correction Factor  Cp</label><input type="number" data-input="cp" data-unit="factor" value="1.0" step="0.01"><span class="u" data-unit="factor"></span></div>
-
     <div class="grp-title" style="display:flex;justify-content:space-between;align-items:center">
       <span>Pipe Sections</span>
       <button type="button" class="action secondary" style="padding:4px 10px;font-size:12px" id="addSection">+ Add section</button>
@@ -166,11 +162,11 @@ code{background:#eef;padding:1px 4px;border-radius:3px;font-family:var(--mono);f
 
     <div class="grp-title">Motor &amp; Drive</div>
     <div class="row"><label>Stock Density</label><input type="number" data-input="density" data-unit="density" value="980" step="1"><span class="u" data-unit="density"></span></div>
-    <div class="row"><label>Pump Hydraulic Efficiency</label><input type="number" data-input="pump_eff" data-unit="percent" value="50" step="0.5"><span class="u" data-unit="percent"></span>
-      <span class="hint">MC pumps typically run 45&ndash;55%. Replace with vendor curve when known.</span>
-    </div>
     <div class="row"><label>Pump Shaft Power from Vendor Curve</label><input type="number" data-input="vendor_bhp" data-unit="power" value="" step="0.1"><span class="u" data-unit="power"></span>
-      <span class="hint">Optional &mdash; if set (&gt;0) it overrides the efficiency-based estimate.</span>
+      <span class="hint">Read BHP at your duty point from the vendor pump curve and enter here. Overrides the efficiency-based value below.</span>
+    </div>
+    <div class="row"><label>Pump Hydraulic Efficiency</label><input type="number" data-input="pump_eff" data-unit="percent" value="" step="0.5"><span class="u" data-unit="percent"></span>
+      <span class="hint"><b>Required</b> if vendor BHP is blank. Enter the actual efficiency from the vendor pump curve at your duty point &mdash; no assumed default.</span>
     </div>
     <div class="row wide"><label>Drive Type</label>
       <select data-input="drive_type"><option>Direct</option><option>V-belt</option><option>Gear</option></select>
@@ -319,22 +315,16 @@ code{background:#eef;padding:1px 4px;border-radius:3px;font-family:var(--mono);f
           <td colspan="2" id="tf_H" style="text-align:right;font-weight:700;font-size:14px">&mdash;</td>
           <td></td>
         </tr>
-        <tr id="tf_hp_row" style="display:none">
-          <td colspan="6" style="text-align:right;font-size:11px;color:#666">Selection Head H&#8242; = H / Ch (for 12% curves)</td>
-          <td colspan="2" id="r_Hp" style="text-align:right;font-size:11px">&mdash;</td>
-          <td></td>
-        </tr>
       </tfoot>
     </table>
 
     <div class="subhead">Motor &amp; Power</div>
     <div class="kv">
-      <div class="k">Hydraulic power</div><div class="v" id="r_hyd">&mdash;</div><div class="u" data-unit="power"></div>
-      <div class="k">Pump shaft power (estimated)</div><div class="v" id="r_shaft">&mdash;</div><div class="u" data-unit="power"></div>
-      <div class="k">Governing shaft power</div><div class="v" id="r_gov">&mdash;</div><div class="u" data-unit="power"></div>
-      <div class="k">Corrected shaft power (&times; Cp)</div><div class="v" id="r_corr">&mdash;</div><div class="u" data-unit="power"></div>
-      <div class="k">Power at motor shaft</div><div class="v" id="r_mshaft">&mdash;</div><div class="u" data-unit="power"></div>
-      <div class="k">Required motor rating (&times; motor factor)</div><div class="v" id="r_reqmotor">&mdash;</div><div class="u" data-unit="power"></div>
+      <div class="k">Hydraulic power  (&rho;gQH)</div><div class="v" id="r_hyd">&mdash;</div><div class="u" data-unit="power"></div>
+      <div class="k">Pump shaft power  (from vendor curve or est.)</div><div class="v" id="r_gov">&mdash;</div><div class="u" data-unit="power"></div>
+      <div class="k">&nbsp;&nbsp;&nbsp;source</div><div class="v" id="r_shaft_src" style="font-size:11px;font-weight:400;color:var(--muted)">&mdash;</div><div class="u"></div>
+      <div class="k">Power at motor shaft  (&divide; drive eff.)</div><div class="v" id="r_mshaft">&mdash;</div><div class="u" data-unit="power"></div>
+      <div class="k">Required motor rating  (&times; motor factor)</div><div class="v" id="r_reqmotor">&mdash;</div><div class="u" data-unit="power"></div>
       <div class="k"><b>Selected standard motor (IEC)</b></div><div class="v" id="r_selmotor"><b>&mdash;</b></div><div class="u" data-unit="power"></div>
     </div>
 
@@ -441,8 +431,14 @@ const CONV = {
                 toUS:v=>v, toSI:v=>v }
 };
 function uLbl(unit){ return CONV[unit] ? CONV[unit][MODE==='US'?'us':'si'].lbl : ''; }
-function toSI(val, unit){ return CONV[unit] && MODE==='US' ? CONV[unit].toSI(val) : val; }
-function toDisplay(val, unit){ return CONV[unit] && MODE==='US' ? CONV[unit].toUS(val) : val; }
+function toSI(val, unit){
+  if(val==null || !isFinite(val)) return val;
+  return CONV[unit] && MODE==='US' ? CONV[unit].toSI(val) : val;
+}
+function toDisplay(val, unit){
+  if(val==null || !isFinite(val)) return val;
+  return CONV[unit] && MODE==='US' ? CONV[unit].toUS(val) : val;
+}
 function decOf(unit){ return CONV[unit] ? CONV[unit][MODE==='US'?'us':'si'].dec : 2; }
 
 // ================================================================
@@ -523,30 +519,27 @@ function calc(I){
   const totalFrictionM = sections.reduce((s,r) => s + (r.empty?0:r.pipeLossM), 0);   // pipe+fittings
   const totalAddM      = sections.reduce((s,r) => s + (r.empty?0:r.equipLossM), 0);  // equipment via equiv length
   const H = static_m + totalFrictionM + totalAddM;
-  const Ch = I.ch ?? 1.0;
-  const Cp = I.cp ?? 1.0;
-  const Hprime = (Ch>0) ? H/Ch : H;
 
   const density = I.density ?? 980;
   const hyd = density * 9.81 * (flow_m3h/3600) * H / 1000;
-  const peff = I.pump_eff ?? 50;
-  const shaft = (peff>0) ? hyd/(peff/100) : 0;
+  const peff = I.pump_eff;                            // no default - user input required
+  const shaft = (peff && peff>0) ? hyd/(peff/100) : null;
   const vendor = I.vendor_bhp;
-  const gov = (vendor && vendor > 0) ? vendor : shaft;
-  const corrected = gov * Cp;
+  const govFromVendor = (vendor && vendor > 0);
+  const gov = govFromVendor ? vendor : shaft;         // null if neither is set
   const deff = I.drive_eff ?? 100;
-  const mshaft = (deff>0) ? corrected/(deff/100) : corrected;
+  const mshaft = (gov==null) ? null : (deff>0 ? gov/(deff/100) : gov);
   const mfac = I.motor_factor ?? 1.2;
-  const reqMotor = mshaft * mfac;
-  const selMotor = IEC_MOTORS.find(m => m >= reqMotor) ?? 800;
+  const reqMotor = (mshaft==null) ? null : mshaft * mfac;
+  const selMotor = (reqMotor==null) ? null : (IEC_MOTORS.find(m => m >= reqMotor) ?? 800);
 
   const V = I.voltage ?? 460;
   const PF = I.power_factor ?? 0.85;
   const meff = I.motor_eff ?? 95;
-  const FLC = (V>0 && PF>0 && meff>0) ? selMotor*1000/(1.7320508*V*PF*(meff/100)) : 0;
+  const FLC = (selMotor && V>0 && PF>0 && meff>0) ? selMotor*1000/(1.7320508*V*PF*(meff/100)) : null;
   const headroom = I.vfd_headroom ?? 1.1;
-  const vfdCurrent = FLC * headroom;
-  const vfdPower = selMotor * headroom;
+  const vfdCurrent = (FLC==null) ? null : FLC * headroom;
+  const vfdPower = (selMotor==null) ? null : selMotor * headroom;
 
   const checkVels = sections.filter(s => !s.empty && s.status !== "nc").map(s => s.vft);
   const minVel = checkVels.length ? Math.min(...checkVels) : null;
@@ -556,8 +549,8 @@ function calc(I){
 
   return {
     F1, F2, F3, F, qgpm, flow_m3h, static_m, sections,
-    totalFrictionM, totalAddM, H, Ch, Cp, Hprime,
-    hyd, shaft, gov, corrected, mshaft, reqMotor, selMotor,
+    totalFrictionM, totalAddM, H,
+    hyd, shaft, gov, govFromVendor, mshaft, reqMotor, selMotor,
     FLC, vfdCurrent, vfdPower, minVel, velLimit, minSafeSpeed, minSafeFlow,
     inputs: I
   };
@@ -738,22 +731,18 @@ function render(R){
   g("tf_add").textContent    = fmt(toDisplay(R.totalAddM,'length'), 2);
   g("tf_static").textContent = `${fmt(toDisplay(R.static_m,'length'), 2)} ${uLbl('length')}`;
   g("tf_H").textContent      = `${fmt(toDisplay(R.H,'length'), 2)} ${uLbl('length')}`;
-  const hpRow = g("tf_hp_row");
-  if(Math.abs((R.Ch??1) - 1) > 0.001){
-    hpRow.style.display = "";
-    g("r_Hp").textContent = `${fmt(toDisplay(R.Hprime,'length'), 2)} ${uLbl('length')}`;
-  } else {
-    hpRow.style.display = "none";
-  }
 
   // power block
-  g("r_hyd").textContent      = fmt(toDisplay(R.hyd,'power'), decOf('power'));
-  g("r_shaft").textContent    = fmt(toDisplay(R.shaft,'power'), decOf('power'));
-  g("r_gov").textContent      = fmt(toDisplay(R.gov,'power'), decOf('power'));
-  g("r_corr").textContent     = fmt(toDisplay(R.corrected,'power'), decOf('power'));
-  g("r_mshaft").textContent   = fmt(toDisplay(R.mshaft,'power'), decOf('power'));
-  g("r_reqmotor").textContent = fmt(toDisplay(R.reqMotor,'power'), 1);
-  g("r_selmotor").textContent = fmt(toDisplay(R.selMotor,'power'), 0);
+  g("r_hyd").textContent       = fmt(toDisplay(R.hyd,'power'), decOf('power'));
+  g("r_gov").textContent       = fmt(toDisplay(R.gov,'power'), decOf('power'));
+  g("r_shaft_src").textContent = R.govFromVendor
+      ? "from vendor curve (BHP input)"
+      : (R.inputs.pump_eff > 0)
+          ? `Hyd ÷ ${R.inputs.pump_eff}% pump eff.`
+          : "— enter vendor BHP or pump efficiency —";
+  g("r_mshaft").textContent    = fmt(toDisplay(R.mshaft,'power'), decOf('power'));
+  g("r_reqmotor").textContent  = fmt(toDisplay(R.reqMotor,'power'), 1);
+  g("r_selmotor").textContent  = fmt(toDisplay(R.selMotor,'power'), 0);
 
   // vfd
   g("r_flc").textContent  = fmt(R.FLC,1);
@@ -807,7 +796,7 @@ function render(R){
     const flowSI = R.flow_m3h * s;
     const flowDisp = MODE==='US' ? Math.round(flowSI/0.2271247) : (flowSI).toFixed(1);
     const headDisp = fmt(toDisplay(R.H*s*s, 'length'), 2);
-    const pwrDisp = fmt(toDisplay(R.corrected*s*s*s, 'power'), 2);
+    const pwrDisp = fmt(toDisplay(R.gov*s*s*s, 'power'), 2);
     const velft = R.minVel ? R.minVel * s : null;
     const velDisp = velft==null ? "—" : (MODE==='US' ? velft.toFixed(3) : (velft*0.3048).toFixed(3));
     const stat = velft==null ? "—" : (velft < R.velLimit ? "PULSATION RISK" : "OK");
@@ -834,16 +823,20 @@ function render(R){
     if(s.status==="low") flags.push({cls:"low", msg:`Section ${s.idx}: velocity ${vDisp} is below the 0.5 ft/s pulsation limit.`});
     if(s.status==="high") flags.push({cls:"high", msg:`Section ${s.idx}: velocity ${vDisp} is above the normal 1.65 ft/s plug-flow band.`});
   });
-  if(R.inputs.consistency_pct > 12 && R.Ch === 1 && R.Cp === 1){
-    flags.push({cls:"info", msg:`Consistency above 12% — set Ch and Cp from the vendor's consistency-correction curve.`});
-  }
-  if(R.selMotor < R.reqMotor){
+  if(R.selMotor==null){
+    flags.push({cls:"info", msg:`Enter <b>Pump Shaft Power from Vendor Curve</b> or <b>Pump Hydraulic Efficiency</b> in the Motor & Drive section to size the motor and VFD.`});
+  } else if(R.selMotor < R.reqMotor){
     flags.push({cls:"low", msg:`Selected motor (${fmt0(toDisplay(R.selMotor,'power'))} ${uLbl('power')}) is below the required rating (${fmt(toDisplay(R.reqMotor,'power'),1)} ${uLbl('power')}).`});
   }
   if(R.minSafeSpeed !== null && R.minSafeSpeed > 1){
     flags.push({cls:"low", msg:`Minimum safe speed exceeds 100% — pipeline is over-sized, no VFD turndown possible.`});
   }
-  flags.forEach(f => { w.appendChild(h("div",{class:"warn-item "+f.cls}, f.msg)); });
+  flags.forEach(f => {
+    const d = document.createElement("div");
+    d.className = "warn-item "+f.cls;
+    d.innerHTML = f.msg;      // allow <b> etc. in warning text
+    w.appendChild(d);
+  });
 
   // update unit label spans in the results block
   document.querySelectorAll(".kv .u [data-unit]").forEach(sp => {
@@ -958,7 +951,6 @@ function downloadXlsx(){
     ["Discharge elevation (m)", I.discharge_elev],
     ["Discharge pressure (m)", I.discharge_pressure],
     ["Suction pressure (m)", I.suction_pressure],
-    ["Ch", I.ch],["Cp", I.cp],
     [],
     ["Stock density (kg/m³)", I.density],
     ["Pump efficiency (%)", I.pump_eff],
@@ -993,14 +985,12 @@ function downloadXlsx(){
     ["Piping friction (pipe + fittings, Bodenheimer)", R.totalFrictionM, "m", R.totalFrictionM*3.28084, "ft"],
     ["Equipment friction (equiv length × hf)", R.totalAddM, "m", R.totalAddM*3.28084, "ft"],
     ["Total required head H", R.H, "m", R.H*3.28084, "ft"],
-    ["Selection head H' = H/Ch", R.Hprime, "m", R.Hprime*3.28084, "ft"],
     [],
     ["Power (kW / HP)"],
-    ["Hydraulic power", R.hyd, "kW", R.hyd*1.34102, "HP"],
-    ["Pump shaft (estimated)", R.shaft, "kW", R.shaft*1.34102, "HP"],
-    ["Governing shaft power", R.gov, "kW", R.gov*1.34102, "HP"],
-    ["Corrected shaft ×Cp", R.corrected, "kW", R.corrected*1.34102, "HP"],
-    ["Motor shaft power", R.mshaft, "kW", R.mshaft*1.34102, "HP"],
+    ["Hydraulic power  (ρgQH)", R.hyd, "kW", R.hyd*1.34102, "HP"],
+    ["Pump shaft power  (from vendor curve or estimated)", R.gov, "kW", R.gov*1.34102, "HP"],
+    ["  source", R.govFromVendor ? "vendor curve BHP" : `estimated: Hyd / ${R.inputs.pump_eff ?? 70}% eff.`],
+    ["Motor shaft power  (÷ drive eff.)", R.mshaft, "kW", R.mshaft*1.34102, "HP"],
     ["Required motor rating", R.reqMotor, "kW", R.reqMotor*1.34102, "HP"],
     ["Selected standard motor", R.selMotor, "kW", R.selMotor*1.34102, "HP"],
     [],
@@ -1042,7 +1032,7 @@ function downloadXlsx(){
     affRows.push([Math.round(s*100)+"%", Math.round(rpm*s),
       +(R.flow_m3h*s).toFixed(1), Math.round(R.flow_m3h*s/0.2271247),
       +(R.H*s*s).toFixed(2), +(R.H*s*s*3.28084).toFixed(2),
-      +(R.corrected*s*s*s).toFixed(2), +(R.corrected*s*s*s*1.34102).toFixed(2),
+      +(R.gov*s*s*s).toFixed(2), +(R.gov*s*s*s*1.34102).toFixed(2),
       vel==null?"":+vel.toFixed(2), vel==null?"":+(vel*0.3048).toFixed(3),
       vel==null?"":(vel<R.velLimit?"PULSATION RISK":"OK")]);
   });
@@ -1130,8 +1120,7 @@ function downloadPdf(){
     ['Static head', fmt(toDisplay(R.static_m,'length'),2), lU],
     ['Piping friction (pipe + fittings, Bodenheimer)', fmt(toDisplay(R.totalFrictionM,'length'),2), lU],
     ['Equipment friction (equiv length × hf)', fmt(toDisplay(R.totalAddM,'length'),2), lU],
-    ['TOTAL REQUIRED HEAD H', fmt(toDisplay(R.H,'length'),2), lU],
-    ["Selection head H' = H/Ch (for 12% curves)", fmt(toDisplay(R.Hprime,'length'),2), lU]
+    ['TOTAL REQUIRED HEAD H', fmt(toDisplay(R.H,'length'),2), lU]
   ]);
 
   if(y > H-70){ doc.addPage(); y=15; }
@@ -1152,12 +1141,10 @@ function downloadPdf(){
   if(y > H-70){ doc.addPage(); y=15; }
   secHead('Motor & Power');
   kv([
-    ['Hydraulic power', fmt(toDisplay(R.hyd,'power'),2), pU],
-    ['Pump shaft (estimated)', fmt(toDisplay(R.shaft,'power'),2), pU],
-    ['Governing shaft power', fmt(toDisplay(R.gov,'power'),2), pU],
-    ['Corrected shaft ×Cp', fmt(toDisplay(R.corrected,'power'),2), pU],
-    ['Motor shaft power', fmt(toDisplay(R.mshaft,'power'),2), pU],
-    ['Required motor rating', fmt(toDisplay(R.reqMotor,'power'),1), pU],
+    ['Hydraulic power  (ρgQH)', fmt(toDisplay(R.hyd,'power'),2), pU],
+    ['Pump shaft power  ('+(R.govFromVendor?'from vendor curve':`estimated: Hyd / ${I.pump_eff??70}% eff.`)+')', fmt(toDisplay(R.gov,'power'),2), pU],
+    ['Motor shaft power  (÷ drive eff.)', fmt(toDisplay(R.mshaft,'power'),2), pU],
+    ['Required motor rating  (× motor factor)', fmt(toDisplay(R.reqMotor,'power'),1), pU],
     ['SELECTED STANDARD MOTOR (IEC)', fmt(toDisplay(R.selMotor,'power'),0), pU]
   ]);
 
@@ -1176,7 +1163,7 @@ function downloadPdf(){
     return [Math.round(s*100)+'%', Math.round(rpm*s),
       MODE==='US'?Math.round(R.flow_m3h*s/0.2271247):fmt(R.flow_m3h*s,1),
       fmt(toDisplay(R.H*s*s,'length'),2),
-      fmt(toDisplay(R.corrected*s*s*s,'power'),2),
+      fmt(toDisplay(R.gov*s*s*s,'power'),2),
       vel==null?'—':(MODE==='US'?fmt(vel,3):fmt(vel*0.3048,3)),
       vel==null?'—':(vel<R.velLimit?'PULSATION RISK':'OK')];
   });
@@ -1220,8 +1207,7 @@ const DEFAULTS_SI = {
   stock_type:"Softwood Sulphate (Kraft)",
   production:632, consistency_pct:8, ph:10, temperature:75,
   suction_level:919, discharge_elev:950.5, discharge_pressure:5, suction_pressure:0,
-  ch:1.0, cp:1.0,
-  density:980, pump_eff:50, vendor_bhp:"",
+  density:980, pump_eff:"", vendor_bhp:"",
   drive_type:"Direct", drive_eff:100, motor_factor:1.2, motor_speed:1780,
   voltage:460, power_factor:0.85, motor_eff:95,
   vfd_headroom:1.1, velocity_limit:0.1524
